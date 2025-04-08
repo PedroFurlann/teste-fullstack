@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id          String    @id @default(uuid())
+  nome        String
+  cpf         String    @unique
+  email       String    @unique
+  telefone    String
+  dataCriacao DateTime  @default(now()) @map("data_criacao")
+  Reserva     Reserva[]
+}
+
+model Locacao {
+  id          String    @id @default(uuid())
+  nome        String
+  tipo        String
+  descricao   String
+  valorHora   Float     @map("valor_hora")
+  tempoMinimo Int       @map("tempo_minimo")
+  tempoMaximo Int       @map("tempo_maximo")
+  dataCriacao DateTime  @default(now()) @map("data_criacao")
+  Reserva     Reserva[]
+}
+
+model Reserva {
+  id          String   @id @default(uuid())
+  clienteId   String   @map("cliente_id")
+  locacaoId   String   @map("locacao_id")
+  dataInicio  DateTime @map("data_inicio")
+  dataFim     DateTime @map("data_fim")
+  valorFinal  Float    @map("valor_final")
+  situacao    String
+  dataCriacao DateTime @default(now()) @map("data_criacao")
+
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+  locacao Locacao @relation(fields: [locacaoId], references: [id])
+}
