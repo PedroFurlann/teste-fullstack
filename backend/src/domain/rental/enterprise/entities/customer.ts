@@ -26,6 +26,10 @@ export class Customer extends Entity<CustomerProps> {
     return this.props.email;
   }
 
+  get cpf() {
+    return this.props.cpf;
+  }
+
   get password() {
     return this.props.password;
   }
