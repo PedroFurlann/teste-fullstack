@@ -1,9 +1,9 @@
-import { Either, left, right } from '../../../../core/either';
-import { Customer } from '../../enterprise/entities/customer';
-import { HashGenerator } from '../cryptography/hash-generator';
+import { Either, left, right } from '../../../../../core/either';
+import { Customer } from '../../../enterprise/entities/customer';
+import { HashGenerator } from '../../cryptography/hash-generator';
 import { Injectable } from '@nestjs/common';
-import { CustomerAlreadyExistsError } from './errors/customer-already-exists-error';
-import { CustomerRepository } from '../repositories/customer-repository';
+import { CustomerAlreadyExistsError } from '../errors/customer-already-exists-error';
+import { CustomerRepository } from '../../repositories/customer-repository';
 
 interface RegisterCustomerUseCaseRequest {
   name: string;

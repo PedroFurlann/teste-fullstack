@@ -1,8 +1,8 @@
-import { InMemoryCustomerRepository } from '../../../../../test/repositories/in-memory-customer-repository';
-import { FakeHasher } from '../../../../../test/cryptography/fake-hasher';
+import { InMemoryCustomerRepository } from '../../../../../../test/repositories/in-memory-customer-repository';
+import { FakeHasher } from '../../../../../../test/cryptography/fake-hasher';
 import { RegisterCustomerUseCase } from './register-customer-use-case';
-import { CustomerAlreadyExistsError } from './errors/customer-already-exists-error';
-import { makeCustomer } from '../../../../../test/factories/make-customer';
+import { CustomerAlreadyExistsError } from '../errors/customer-already-exists-error';
+import { makeCustomer } from '../../../../../../test/factories/make-customer';
 
 let inMemoryCustomerRepository: InMemoryCustomerRepository;
 let fakeHasher: FakeHasher;

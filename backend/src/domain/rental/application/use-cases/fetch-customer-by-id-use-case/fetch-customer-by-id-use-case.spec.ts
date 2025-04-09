@@ -1,7 +1,7 @@
-import { InMemoryCustomerRepository } from '../../../../../test/repositories/in-memory-customer-repository';
+import { InMemoryCustomerRepository } from '../../../../../../test/repositories/in-memory-customer-repository';
 import { FetchCustomerByIdUseCase } from './fetch-customer-by-id-use-case';
-import { makeCustomer } from '../../../../../test/factories/make-customer';
-import { CustomerNotFoundError } from './errors/customer-not-found-error';
+import { makeCustomer } from '../../../../../../test/factories/make-customer';
+import { CustomerNotFoundError } from '../errors/customer-not-found-error';
 
 let inMemoryCustomerRepository: InMemoryCustomerRepository;
 let sut: FetchCustomerByIdUseCase;

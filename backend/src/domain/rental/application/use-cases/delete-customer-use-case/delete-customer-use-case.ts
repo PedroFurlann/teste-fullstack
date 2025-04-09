@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerRepository } from '../repositories/customer-repository';
-import { Either, left, right } from '../../../../core/either';
-import { CustomerNotFoundError } from './errors/customer-not-found-error';
+import { CustomerRepository } from '../../repositories/customer-repository';
+import { Either, left, right } from '../../../../../core/either';
+import { CustomerNotFoundError } from '../errors/customer-not-found-error';
 
 interface DeleteCustomerUseCaseRequest {
   customerId: string;

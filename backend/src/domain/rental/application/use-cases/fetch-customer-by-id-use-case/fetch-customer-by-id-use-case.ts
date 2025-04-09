@@ -1,8 +1,8 @@
-import { Either, left, right } from '../../../../core/either';
+import { Either, left, right } from '../../../../../core/either';
 import { Injectable } from '@nestjs/common';
-import { CustomerRepository } from '../repositories/customer-repository';
-import { Customer } from '../../enterprise/entities/customer';
-import { CustomerNotFoundError } from './errors/customer-not-found-error';
+import { CustomerRepository } from '../../repositories/customer-repository';
+import { Customer } from '../../../enterprise/entities/customer';
+import { CustomerNotFoundError } from '../errors/customer-not-found-error';
 
 interface FetchCustomerByIdUseCaseRequest {
   customerId: string;

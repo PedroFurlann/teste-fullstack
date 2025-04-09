@@ -1,9 +1,9 @@
-import { Customer } from '../../enterprise/entities/customer';
+import { Customer } from '../../../enterprise/entities/customer';
 import { Injectable } from '@nestjs/common';
-import { CustomerRepository } from '../repositories/customer-repository';
-import { Either, left, right } from '../../../../core/either';
-import { HashGenerator } from '../cryptography/hash-generator';
-import { CustomerNotFoundError } from './errors/customer-not-found-error';
+import { CustomerRepository } from '../../repositories/customer-repository';
+import { Either, left, right } from '../../../../../core/either';
+import { HashGenerator } from '../../cryptography/hash-generator';
+import { CustomerNotFoundError } from '../errors/customer-not-found-error';
 
 interface EditCustomerUseCaseRequest {
   customerId: string;
