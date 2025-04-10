@@ -3,23 +3,23 @@ import { BookingRepository } from '../../repositories/booking-repository';
 import { BookingNotFoundError } from '../errors/booking-not-found-error';
 import { BookingDoesNotBelongToCustomerError } from '../errors/booking-does-not-belong-to-customer-error';
 
-interface DeleteBookingUseCaseRequest {
+interface CancelBookingUseCaseRequest {
   bookingId: string;
   customerId: string;
 }
 
-type DeleteBookingUseCaseResponse = Either<
+type CancelBookingUseCaseResponse = Either<
   BookingNotFoundError | BookingDoesNotBelongToCustomerError,
   null
 >;
 
-export class DeleteBookingUseCase {
+export class CancelBookingUseCase {
   constructor(private bookingRepository: BookingRepository) {}
 
   async execute({
     bookingId,
     customerId,
-  }: DeleteBookingUseCaseRequest): Promise<DeleteBookingUseCaseResponse> {
+  }: CancelBookingUseCaseRequest): Promise<CancelBookingUseCaseResponse> {
     const booking = await this.bookingRepository.findById(bookingId);
 
     if (!booking) {
@@ -30,7 +30,10 @@ export class DeleteBookingUseCase {
       return left(new BookingDoesNotBelongToCustomerError());
     }
 
-    await this.bookingRepository.delete(bookingId);
+    booking.status = 'canceled';
+
+    await this.bookingRepository.update(booking);
+
     return right(null);
   }
 }

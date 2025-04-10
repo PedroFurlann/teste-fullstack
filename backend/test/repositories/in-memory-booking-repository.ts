@@ -31,12 +31,4 @@ export class InMemoryBookingRepository implements BookingRepository {
   async delete(bookingId: string): Promise<void> {
     this.items = this.items.filter((b) => b.id.toString() !== bookingId);
   }
-
-  async cancel(bookingId: string): Promise<void> {
-    const booking = await this.findById(bookingId);
-    if (booking) {
-      booking.status = 'canceled';
-      await this.update(booking);
-    }
-  }
 }

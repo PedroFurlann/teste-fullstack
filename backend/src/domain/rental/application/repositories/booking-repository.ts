@@ -7,5 +7,4 @@ export abstract class BookingRepository {
   abstract findByPropertyId(propertyId: string): Promise<Booking[]>;
   abstract update(booking: Booking): Promise<void>;
   abstract delete(bookingId: string): Promise<void>;
-  abstract cancel(bookingId: string): Promise<void>;
 }
