@@ -7,8 +7,8 @@ import { CustomerNotFoundError } from '../errors/customer-not-found-error';
 
 interface EditCustomerUseCaseRequest {
   customerId: string;
-  name: string;
-  phone: string;
+  name?: string;
+  phone?: string;
   password?: string | null;
 }
 
@@ -36,8 +36,9 @@ export class EditCustomerUseCase {
       return left(new CustomerNotFoundError());
     }
 
-    customerSelected.name = name;
-    customerSelected.phone = phone;
+    if (name) customerSelected.name = name;
+
+    if (phone) customerSelected.phone = phone;
 
     if (password) {
       const hashedPassword = await this.hashGenerator.hash(password);
