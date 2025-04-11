@@ -18,10 +18,12 @@ import { FetchCustomerByIdUseCase } from '../../domain/rental/application/use-ca
 import { FetchCustomerPropertiesUseCase } from '../../domain/rental/application/use-cases/fetch-customer-properties-use-case/fetch-customer-properties-use-case';
 import { FetchPropertyByIdUseCase } from '../../domain/rental/application/use-cases/fetch-property-by-id-use-case/fetch-property-by-id-use-case';
 import { RegisterCustomerUseCase } from '../../domain/rental/application/use-cases/register-customer-use-case/register-customer-use-case';
+import { AuthenticateController } from './controllers/authenticate.controller';
+import { CustomerController } from './controllers/customer.controller';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
-  controllers: [],
+  controllers: [AuthenticateController, CustomerController],
   providers: [
     AuthenticateCustomerUseCase,
     CancelBookingUseCase,

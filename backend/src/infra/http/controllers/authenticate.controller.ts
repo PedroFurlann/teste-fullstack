@@ -24,7 +24,7 @@ type AuthenticateCustomerBodyType = z.infer<
 
 @Controller('/auth')
 @Public()
-export class AuthenticateCustomerController {
+export class AuthenticateController {
   constructor(
     private readonly authenticateCustomerUseCase: AuthenticateCustomerUseCase,
   ) {}
