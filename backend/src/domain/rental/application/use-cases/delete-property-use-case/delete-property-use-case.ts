@@ -1,7 +1,9 @@
 import { Either, left, right } from '../../../../../core/either';
 import { PropertyRepository } from '../../repositories/property-repository';
+import { BookingRepository } from '../../repositories/booking-repository';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error';
+import { PropertyHasActiveBookingsError } from '../errors/property-has-active-bookings-error';
 
 interface DeletePropertyUseCaseRequest {
   propertyId: string;
@@ -9,12 +11,17 @@ interface DeletePropertyUseCaseRequest {
 }
 
 type DeletePropertyUseCaseResponse = Either<
-  PropertyNotFoundError | PropertyDoesNotBelongToCustomerError,
+  | PropertyNotFoundError
+  | PropertyDoesNotBelongToCustomerError
+  | PropertyHasActiveBookingsError,
   null
 >;
 
 export class DeletePropertyUseCase {
-  constructor(private propertyRepository: PropertyRepository) {}
+  constructor(
+    private propertyRepository: PropertyRepository,
+    private bookingRepository: BookingRepository,
+  ) {}
 
   async execute({
     propertyId,
@@ -30,8 +37,20 @@ export class DeletePropertyUseCase {
       return left(new PropertyDoesNotBelongToCustomerError());
     }
 
-    await this.propertyRepository.delete(propertyId);
+    const bookings = await this.bookingRepository.findByPropertyId(propertyId);
+    const now = new Date();
+    const hasActiveBooking = bookings.some(
+      (booking) =>
+        booking.status === 'confirmed' &&
+        now >= booking.startDate &&
+        now <= booking.endDate,
+    );
 
+    if (hasActiveBooking) {
+      return left(new PropertyHasActiveBookingsError());
+    }
+
+    await this.propertyRepository.delete(propertyId);
     return right(null);
   }
 }

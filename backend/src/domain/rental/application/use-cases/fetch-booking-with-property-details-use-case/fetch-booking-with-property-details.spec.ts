@@ -15,7 +15,6 @@ describe('Fetch Booking With Property Details', () => {
   beforeEach(() => {
     inMemoryBookingRepository = new InMemoryBookingRepository();
     inMemoryPropertyRepository = new InMemoryPropertyRepository();
-
     sut = new FetchBookingWithPropertyDetailsUseCase(
       inMemoryBookingRepository,
       inMemoryPropertyRepository,

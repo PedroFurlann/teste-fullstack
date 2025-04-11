@@ -1,28 +1,34 @@
 import { InMemoryBookingRepository } from '../../../../../../test/repositories/in-memory-booking-repository';
-import { InMemoryPropertyRepository } from '../../../../../../test/repositories/in-memory-property-repository';
 import { makeBooking } from '../../../../../../test/factories/make-booking';
 import { makeProperty } from '../../../../../../test/factories/make-property';
+import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
 import { FetchCustomerBookingsWithPropertyNameUseCase } from './fetch-customer-bookings-with-property-name-use-case';
 
-describe('Fetch customer bookings with property name', () => {
-  it('should return customer bookings with property names', async () => {
-    const bookingRepository = new InMemoryBookingRepository();
-    const propertyRepository = new InMemoryPropertyRepository();
-    const fetchCustomerBookingsWithPropertyName =
-      new FetchCustomerBookingsWithPropertyNameUseCase(bookingRepository);
+let inMemoryBookingRepository: InMemoryBookingRepository;
+let sut: FetchCustomerBookingsWithPropertyNameUseCase;
 
-    const property = makeProperty({ name: 'Mustang' });
+describe('Fetch customer bookings with property name', () => {
+  beforeEach(() => {
+    inMemoryBookingRepository = new InMemoryBookingRepository();
+    sut = new FetchCustomerBookingsWithPropertyNameUseCase(
+      inMemoryBookingRepository,
+    );
+  });
+
+  it('should return customer bookings with properties names', async () => {
+    const customerId = new UniqueEntityID('customer-1');
+
+    const property = makeProperty({ name: 'Mustang', customerId: customerId });
     const booking = makeBooking({
       propertyId: property.id,
-      customerId: property.customerId,
+      customerId: customerId,
     });
 
-    propertyRepository.items.push(property);
-    bookingRepository.items.push(booking);
-    bookingRepository.properties.push(property);
+    inMemoryBookingRepository.items.push(booking);
+    inMemoryBookingRepository.properties.push(property);
 
-    const result = await fetchCustomerBookingsWithPropertyName.execute({
-      customerId: booking.customerId.toString(),
+    const result = await sut.execute({
+      customerId: customerId.toString(),
     });
 
     expect(result.isRight()).toBe(true);
