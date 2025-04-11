@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  HttpCode,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -30,7 +29,6 @@ export class AuthenticateController {
   ) {}
 
   @Post('/customer')
-  @HttpCode(200)
   async authenticateCustomer(
     @Body(new InvalidDataValidationPipe(authenticateCustomerBodySchema))
     body: AuthenticateCustomerBodyType,

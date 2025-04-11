@@ -3,6 +3,7 @@ import { PropertyRepository } from '../../repositories/property-repository';
 import { Injectable } from '@nestjs/common';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error'; // <- novo
+import { Property } from '../../../../../domain/rental/enterprise/entities/property';
 
 interface EditPropertyUseCaseRequest {
   propertyId: string;
@@ -17,7 +18,7 @@ interface EditPropertyUseCaseRequest {
 
 type EditPropertyUseCaseResponse = Either<
   PropertyNotFoundError | PropertyDoesNotBelongToCustomerError,
-  null
+  { property: Property }
 >;
 
 @Injectable()
@@ -34,25 +35,27 @@ export class EditPropertyUseCase {
     maxTime,
     pricePerHour,
   }: EditPropertyUseCaseRequest): Promise<EditPropertyUseCaseResponse> {
-    const property = await this.propertyRepository.findById(propertyId);
+    const propertySelected = await this.propertyRepository.findById(propertyId);
 
-    if (!property) {
+    if (!propertySelected) {
       return left(new PropertyNotFoundError());
     }
 
-    if (property.customerId.toString() !== customerId) {
+    if (propertySelected.customerId.toString() !== customerId) {
       return left(new PropertyDoesNotBelongToCustomerError());
     }
 
-    if (name) property.name = name;
-    if (type) property.type = type;
-    if (description) property.description = description;
-    if (minTime) property.minTime = minTime;
-    if (maxTime) property.maxTime = maxTime;
-    if (pricePerHour) property.pricePerHour = pricePerHour;
+    if (name) propertySelected.name = name;
+    if (type) propertySelected.type = type;
+    if (description) propertySelected.description = description;
+    if (minTime) propertySelected.minTime = minTime;
+    if (maxTime) propertySelected.maxTime = maxTime;
+    if (pricePerHour) propertySelected.pricePerHour = pricePerHour;
 
-    await this.propertyRepository.update(property);
+    await this.propertyRepository.update(propertySelected);
 
-    return right(null);
+    return right({
+      property: propertySelected,
+    });
   }
 }

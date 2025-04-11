@@ -54,6 +54,7 @@ export class CustomerController {
   ) {}
 
   @Post('/')
+  @HttpCode(201)
   @Public()
   async registerCustomer(
     @Body(new InvalidDataValidationPipe(registerCustomerBodySchema))
@@ -87,7 +88,9 @@ export class CustomerController {
     const { customer } = result.value;
 
     return {
-      customer: CustomerPresenter.toHTTP(customer),
+      status: 201,
+      customerId: customer.id.toString(),
+      message: 'Cliente criado com sucesso!',
     };
   }
 
@@ -156,7 +159,9 @@ export class CustomerController {
     const { customer } = result.value;
 
     return {
-      customer: CustomerPresenter.toHTTP(customer),
+      stataus: 200,
+      customerId: customer.id.toString(),
+      message: 'Cliente editado com sucesso!',
     };
   }
 
@@ -186,6 +191,6 @@ export class CustomerController {
       }
     }
 
-    return;
+    return { status: 204, message: 'Cliente deletado com sucesso!' };
   }
 }
