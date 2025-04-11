@@ -12,9 +12,7 @@ type FetchBookingWithPropertyDetailsUseCaseResponse = Either<
   PropertyNotFoundError | BookingNotFoundError,
   {
     bookingId: string;
-    customerId: string;
     propertyId: string;
-    propertyName: string;
     startDate: Date;
     endDate: Date;
     finalPrice: number;
@@ -55,9 +53,7 @@ export class FetchBookingWithPropertyDetailsUseCase {
 
     return right({
       bookingId: booking.id.toString(),
-      customerId: booking.customerId.toString(),
       propertyId: booking.propertyId.toString(),
-      propertyName: property.name,
       startDate: booking.startDate,
       endDate: booking.endDate,
       finalPrice: booking.finalPrice,
