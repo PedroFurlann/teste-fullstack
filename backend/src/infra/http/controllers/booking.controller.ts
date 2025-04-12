@@ -36,7 +36,7 @@ import { CustomerBookingsWithPropertyNamePresenter } from '../presenters/custome
 import { InvalidDateError } from 'src/domain/rental/application/use-cases/errors/invalid-date-error';
 
 const createBookingBodySchema = z.object({
-  propertyId: z.string(),
+  propertyId: z.string().uuid('ID da propriedade inválido'),
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
 });
@@ -170,9 +170,11 @@ export class BookingController {
     @Param('id') bookingId: string,
     @CurrentUser() user: UserPayload,
   ) {
+    const customerId = user.sub;
+
     const result = await this.cancelBookingUseCase.execute({
+      customerId,
       bookingId,
-      customerId: user.sub,
     });
 
     if (result.isLeft()) {
@@ -232,6 +234,20 @@ export class BookingController {
     };
   }
 
+  @Get('/customer')
+  async fetchCustomerBookingsWithPropertyName(
+    @CurrentUser() user: UserPayload,
+  ) {
+    const customerId = user.sub;
+
+    const result =
+      await this.fetchCustomerBookingsWithPropertyNameUseCase.execute({
+        customerId,
+      });
+
+    return CustomerBookingsWithPropertyNamePresenter.toHTTP(result.value);
+  }
+
   @Get('/:id')
   async fetchBookingWithPropertyDetails(@Param('id') bookingId: string) {
     const result = await this.fetchBookingWithPropertyDetailsUseCase.execute({
@@ -257,20 +273,6 @@ export class BookingController {
       bookingWithPropertyDetails: BookingWithPropertyDetailsPresenter.toHTTP(
         result.value,
       ),
-    };
-  }
-
-  @Get('/customer')
-  async fetchCustomerBookingsWithPropertyName(
-    @CurrentUser() user: UserPayload,
-  ) {
-    const result =
-      await this.fetchCustomerBookingsWithPropertyNameUseCase.execute({
-        customerId: user.sub,
-      });
-
-    return {
-      bookings: CustomerBookingsWithPropertyNamePresenter.toHTTP(result.value),
     };
   }
 }

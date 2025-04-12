@@ -7,6 +7,7 @@ import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outside-allowed-range-error';
 import { BookingDateConflictError } from '../errors/booking-date-conflict-error';
 import { InvalidDateError } from '../errors/invalid-date-error';
+import { Injectable } from '@nestjs/common';
 
 interface CreateBookingUseCaseRequest {
   customerId: string;
@@ -25,6 +26,7 @@ type CreateBookingUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class CreateBookingUseCase {
   constructor(
     private bookingRepository: BookingRepository,

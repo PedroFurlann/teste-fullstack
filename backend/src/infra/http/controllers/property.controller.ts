@@ -35,21 +35,37 @@ import { InvalidTimeError } from '../../../domain/rental/application/use-cases/e
 import { InvalidDateError } from '../../../domain/rental/application/use-cases/errors/invalid-date-error';
 
 const createPropertyBodySchema = z.object({
-  name: z.string(),
-  type: z.string(),
-  description: z.string(),
-  minTime: z.number(),
-  maxTime: z.number(),
-  pricePerHour: z.number(),
+  name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres'),
+  type: z.string().min(2, 'O Tipo deve ter pelo menos 2 caracteres'),
+  description: z
+    .string()
+    .min(5, 'A Descrição deve ter pelo menos 5 caracteres'),
+  minTime: z.number().min(1, 'O tempo mínimo deve ser maior do que zero'),
+  maxTime: z.number().min(2, 'O tempo máximo deve ser maior do que 1'),
+  pricePerHour: z
+    .number()
+    .min(1, 'O preço por hora deve ser maior do que zero'),
 });
 
 const editPropertyBodySchema = z.object({
-  name: z.string().optional(),
-  type: z.string().optional(),
-  description: z.string().optional(),
-  minTime: z.number().optional(),
-  maxTime: z.number().optional(),
-  pricePerHour: z.number().optional(),
+  name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres').optional(),
+  type: z.string().min(2, 'O Tipo deve ter pelo menos 2 caracteres').optional(),
+  description: z
+    .string()
+    .min(5, 'A Descrição deve ter pelo menos 5 caracteres')
+    .optional(),
+  minTime: z
+    .number()
+    .min(1, 'O tempo mínimo deve ser maior do que zero')
+    .optional(),
+  maxTime: z
+    .number()
+    .min(2, 'O tempo máximo deve ser maior do que 1')
+    .optional(),
+  pricePerHour: z
+    .number()
+    .min(1, 'O preço por hora deve ser maior do que zero')
+    .optional(),
 });
 
 const fetchAvailableQuerySchema = z.object({

@@ -12,9 +12,13 @@ import { InvalidDataValidationPipe } from '../pipes/invalid-data-validation.pipe
 import { z } from 'zod';
 
 const authenticateCustomerBodySchema = z.object({
-  type: z.enum(['email', 'cpf']),
-  identifier: z.string().min(1),
-  password: z.string().min(1),
+  type: z.enum(['email', 'cpf'], {
+    message: 'Tipo inválido. Só são permitidos email ou cpf',
+  }),
+  identifier: z
+    .string()
+    .min(1, 'O identificador deve ter pelo menos 1 caractere'),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
 });
 
 type AuthenticateCustomerBodyType = z.infer<

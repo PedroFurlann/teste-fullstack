@@ -3,6 +3,7 @@ import { BookingRepository } from '../../repositories/booking-repository';
 import { PropertyRepository } from '../../repositories/property-repository';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { BookingNotFoundError } from '../errors/booking-not-found-error';
+import { Injectable } from '@nestjs/common';
 
 interface FetchBookingWithPropertyDetailsUseCaseRequest {
   bookingId: string;
@@ -28,6 +29,7 @@ type FetchBookingWithPropertyDetailsUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class FetchBookingWithPropertyDetailsUseCase {
   constructor(
     private bookingRepository: BookingRepository,

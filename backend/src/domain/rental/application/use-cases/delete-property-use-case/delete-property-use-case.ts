@@ -4,6 +4,7 @@ import { BookingRepository } from '../../repositories/booking-repository';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error';
 import { PropertyHasActiveBookingsError } from '../errors/property-has-active-bookings-error';
+import { Injectable } from '@nestjs/common';
 
 interface DeletePropertyUseCaseRequest {
   propertyId: string;
@@ -17,6 +18,7 @@ type DeletePropertyUseCaseResponse = Either<
   null
 >;
 
+@Injectable()
 export class DeletePropertyUseCase {
   constructor(
     private propertyRepository: PropertyRepository,

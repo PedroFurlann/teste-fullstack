@@ -2,6 +2,7 @@ import { Either, left, right } from '../../../../../core/either';
 import { BookingRepository } from '../../repositories/booking-repository';
 import { BookingNotFoundError } from '../errors/booking-not-found-error';
 import { BookingDoesNotBelongToCustomerError } from '../errors/booking-does-not-belong-to-customer-error';
+import { Injectable } from '@nestjs/common';
 
 interface CancelBookingUseCaseRequest {
   bookingId: string;
@@ -13,6 +14,7 @@ type CancelBookingUseCaseResponse = Either<
   null
 >;
 
+@Injectable()
 export class CancelBookingUseCase {
   constructor(private bookingRepository: BookingRepository) {}
 

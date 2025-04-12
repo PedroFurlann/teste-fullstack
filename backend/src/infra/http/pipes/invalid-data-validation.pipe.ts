@@ -12,6 +12,7 @@ export class InvalidDataValidationPipe implements PipeTransform {
       if (error instanceof ZodError) {
         throw new BadRequestException({
           error_description:
+            error.errors[0].message ||
             'Os dados fornecidos para a requisição são inválidos',
         });
       }

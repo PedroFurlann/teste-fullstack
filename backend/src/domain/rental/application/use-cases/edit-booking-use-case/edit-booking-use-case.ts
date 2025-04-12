@@ -8,6 +8,7 @@ import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outs
 import { BookingNotFoundError } from '../errors/booking-not-found-error';
 import { BookingDoesNotBelongToCustomerError } from '../errors/booking-does-not-belong-to-customer-error';
 import { InvalidDateError } from '../errors/invalid-date-error';
+import { Injectable } from '@nestjs/common';
 
 interface EditBookingUseCaseRequest {
   bookingId: string;
@@ -28,6 +29,7 @@ type EditBookingUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class EditBookingUseCase {
   constructor(
     private bookingRepository: BookingRepository,

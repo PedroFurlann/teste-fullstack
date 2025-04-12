@@ -3,6 +3,7 @@ import { Property } from '../../../enterprise/entities/property';
 import { PropertyRepository } from '../../repositories/property-repository';
 import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
 import { InvalidTimeError } from '../errors/invalid-time-error';
+import { Injectable } from '@nestjs/common';
 
 interface CreatePropertyUseCaseRequest {
   customerId: string;
@@ -19,6 +20,7 @@ type CreatePropertyUseCaseResponse = Either<
   { property: Property }
 >;
 
+@Injectable()
 export class CreatePropertyUseCase {
   constructor(private propertyRepository: PropertyRepository) {}
 

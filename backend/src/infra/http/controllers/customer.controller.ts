@@ -27,18 +27,40 @@ import { CustomerNotFoundError } from '../../../domain/rental/application/use-ca
 
 import { InvalidDataValidationPipe } from '../pipes/invalid-data-validation.pipe';
 
+const phoneRegex = /^\d{11}$/;
+const cpfRegex = /^\d{11}$/;
+
 const registerCustomerBodySchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  cpf: z.string().min(11).max(14),
-  phone: z.string(),
-  password: z.string().min(6),
+  name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres'),
+  email: z.string().email('Email inválido'),
+  cpf: z
+    .string()
+    .regex(
+      cpfRegex,
+      'O CPF deve conter exatamente 11 dígitos numéricos (ex: 49246739459)',
+    ),
+  phone: z
+    .string()
+    .regex(
+      phoneRegex,
+      'O telefone deve conter exatamente 11 dígitos numéricos (ex: 17991145574)',
+    ),
+  password: z.string().min(6, 'A senha deve ter pelo menos 6 caracteres'),
 });
 
 const editCustomerBodySchema = z.object({
-  name: z.string().optional(),
-  phone: z.string().optional(),
-  password: z.string().min(6).optional(),
+  name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres').optional(),
+  phone: z
+    .string()
+    .regex(
+      phoneRegex,
+      'O telefone deve conter exatamente 11 dígitos numéricos (ex: 17991145574)',
+    )
+    .optional(),
+  password: z
+    .string()
+    .min(6, 'A senha deve ter pelo menos 6 caracteres')
+    .optional(),
 });
 
 type RegisterCustomerBody = z.infer<typeof registerCustomerBodySchema>;

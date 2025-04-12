@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { Either, right } from '../../../../../core/either';
 import { BookingRepository } from '../../repositories/booking-repository';
 
@@ -20,6 +21,7 @@ type FetchCustomerBookingsWithPropertyNameUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class FetchCustomerBookingsWithPropertyNameUseCase {
   constructor(private bookingRepository: BookingRepository) {}
 
