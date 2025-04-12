@@ -1,7 +1,8 @@
-import { Either, right } from '../../../../../core/either';
+import { Either, right, left } from '../../../../../core/either';
 import { Property } from '../../../enterprise/entities/property';
 import { PropertyRepository } from '../../repositories/property-repository';
 import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
+import { InvalidTimeError } from '../errors/invalid-time-error';
 
 interface CreatePropertyUseCaseRequest {
   customerId: string;
@@ -13,7 +14,10 @@ interface CreatePropertyUseCaseRequest {
   pricePerHour: number;
 }
 
-type CreatePropertyUseCaseResponse = Either<null, { property: Property }>;
+type CreatePropertyUseCaseResponse = Either<
+  InvalidTimeError,
+  { property: Property }
+>;
 
 export class CreatePropertyUseCase {
   constructor(private propertyRepository: PropertyRepository) {}
@@ -27,6 +31,10 @@ export class CreatePropertyUseCase {
     maxTime,
     pricePerHour,
   }: CreatePropertyUseCaseRequest): Promise<CreatePropertyUseCaseResponse> {
+    if (minTime >= maxTime) {
+      return left(new InvalidTimeError());
+    }
+
     const property = Property.create({
       customerId: new UniqueEntityID(customerId),
       name,

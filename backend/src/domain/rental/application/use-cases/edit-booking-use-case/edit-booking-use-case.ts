@@ -7,6 +7,7 @@ import { BookingDateConflictError } from '../errors/booking-date-conflict-error'
 import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outside-allowed-range-error';
 import { BookingNotFoundError } from '../errors/booking-not-found-error';
 import { BookingDoesNotBelongToCustomerError } from '../errors/booking-does-not-belong-to-customer-error';
+import { InvalidDateError } from '../errors/invalid-date-error';
 
 interface EditBookingUseCaseRequest {
   bookingId: string;
@@ -19,6 +20,7 @@ type EditBookingUseCaseResponse = Either<
   | PropertyNotFoundError
   | BookingNotFoundError
   | BookingDateConflictError
+  | InvalidDateError
   | BookingTimeOutsideAllowedRangeError
   | BookingDoesNotBelongToCustomerError,
   {
@@ -87,6 +89,10 @@ export class EditBookingUseCase {
     booking.endDate = endDate;
     booking.finalPrice = finalPrice;
     booking.status = 'confirmed';
+
+    if (booking.startDate >= booking.endDate) {
+      return left(new InvalidDateError());
+    }
 
     await this.bookingRepository.update(booking);
 

@@ -7,6 +7,7 @@ import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { BookingDateConflictError } from '../errors/booking-date-conflict-error';
 import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outside-allowed-range-error';
 import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
+import { InvalidDateError } from '../errors/invalid-date-error';
 
 let inMemoryBookingRepository: InMemoryBookingRepository;
 let inMemoryPropertyRepository: InMemoryPropertyRepository;
@@ -111,5 +112,25 @@ describe('Create Booking', () => {
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(BookingTimeOutsideAllowedRangeError);
+  });
+
+  it('should not allow booking if startDate is after or equal to endDate', async () => {
+    const property = makeProperty({
+      minTime: 1,
+      maxTime: 5,
+      pricePerHour: 100,
+    });
+
+    await inMemoryPropertyRepository.create(property);
+
+    const result = await sut.execute({
+      customerId: 'customer-04',
+      propertyId: property.id.toString(),
+      startDate: new Date('2025-05-01T12:00:00Z'),
+      endDate: new Date('2025-05-01T10:00:00Z'),
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(InvalidDateError);
   });
 });

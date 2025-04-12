@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error'; // <- novo
 import { Property } from '../../../../../domain/rental/enterprise/entities/property';
+import { InvalidTimeError } from '../errors/invalid-time-error';
 
 interface EditPropertyUseCaseRequest {
   propertyId: string;
@@ -17,7 +18,9 @@ interface EditPropertyUseCaseRequest {
 }
 
 type EditPropertyUseCaseResponse = Either<
-  PropertyNotFoundError | PropertyDoesNotBelongToCustomerError,
+  | PropertyNotFoundError
+  | PropertyDoesNotBelongToCustomerError
+  | InvalidTimeError,
   { property: Property }
 >;
 
@@ -51,6 +54,10 @@ export class EditPropertyUseCase {
     if (minTime) propertySelected.minTime = minTime;
     if (maxTime) propertySelected.maxTime = maxTime;
     if (pricePerHour) propertySelected.pricePerHour = pricePerHour;
+
+    if (propertySelected.minTime >= propertySelected.maxTime) {
+      return left(new InvalidTimeError());
+    }
 
     await this.propertyRepository.update(propertySelected);
 

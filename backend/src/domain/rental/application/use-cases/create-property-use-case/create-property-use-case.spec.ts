@@ -1,6 +1,7 @@
 import { CreatePropertyUseCase } from './create-property-use-case';
 import { InMemoryPropertyRepository } from '../../../../../../test/repositories/in-memory-property-repository';
 import { makeProperty } from '../../../../../../test/factories/make-property';
+import { InvalidTimeError } from '../errors/invalid-time-error';
 
 let inMemoryPropertyRepository: InMemoryPropertyRepository;
 let sut: CreatePropertyUseCase;
@@ -39,5 +40,25 @@ describe('Create Property', () => {
         fakeProperty.customerId.toString(),
       );
     }
+  });
+
+  it('should not allow property creation if minTime is greater than or equal to maxTime', async () => {
+    const fakeProperty = makeProperty({
+      minTime: 5,
+      maxTime: 3,
+    });
+
+    const result = await sut.execute({
+      customerId: fakeProperty.customerId.toString(),
+      name: fakeProperty.name,
+      type: fakeProperty.type,
+      description: fakeProperty.description,
+      minTime: fakeProperty.minTime,
+      maxTime: fakeProperty.maxTime,
+      pricePerHour: fakeProperty.pricePerHour,
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(InvalidTimeError);
   });
 });

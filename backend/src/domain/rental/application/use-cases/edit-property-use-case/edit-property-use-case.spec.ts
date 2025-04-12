@@ -4,6 +4,7 @@ import { makeProperty } from '../../../../../../test/factories/make-property';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error';
 import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
+import { InvalidTimeError } from '../errors/invalid-time-error';
 
 let inMemoryPropertyRepository: InMemoryPropertyRepository;
 let sut: EditPropertyUseCase;
@@ -65,5 +66,23 @@ describe('Edit Property Use Case', () => {
 
     expect(result.isLeft()).toBe(true);
     expect(result.value).toBeInstanceOf(PropertyDoesNotBelongToCustomerError);
+  });
+
+  it('should return error if minTime is greater than or equal to maxTime', async () => {
+    const property = makeProperty({
+      minTime: 2,
+      maxTime: 5,
+    });
+
+    await inMemoryPropertyRepository.create(property);
+
+    const result = await sut.execute({
+      propertyId: property.id.toString(),
+      customerId: property.customerId.toString(),
+      minTime: 6,
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(InvalidTimeError);
   });
 });

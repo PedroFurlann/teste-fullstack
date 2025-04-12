@@ -2,6 +2,7 @@ import { InMemoryPropertyRepository } from '../../../../../../test/repositories/
 import { FetchAvailablePropertiesUseCase } from './fetch-available-properties-use-case';
 import { makeProperty } from '../../../../../../test/factories/make-property';
 import { makeBooking } from '../../../../../../test/factories/make-booking';
+import { InvalidDateError } from '../errors/invalid-date-error';
 
 let inMemoryPropertyRepository: InMemoryPropertyRepository;
 let sut: FetchAvailablePropertiesUseCase;
@@ -65,5 +66,15 @@ describe('Fetch Available Properties', () => {
       const { properties } = result.value;
       expect(properties).toHaveLength(2);
     }
+  });
+
+  it('should return error if startDate is greater than or equal to endDate', async () => {
+    const result = await sut.execute({
+      startDate: new Date('2025-05-01T10:00:00'),
+      endDate: new Date('2025-05-01T08:00:00'),
+    });
+
+    expect(result.isLeft()).toBe(true);
+    expect(result.value).toBeInstanceOf(InvalidDateError);
   });
 });

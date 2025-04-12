@@ -20,10 +20,17 @@ import { FetchPropertyByIdUseCase } from '../../domain/rental/application/use-ca
 import { RegisterCustomerUseCase } from '../../domain/rental/application/use-cases/register-customer-use-case/register-customer-use-case';
 import { AuthenticateController } from './controllers/authenticate.controller';
 import { CustomerController } from './controllers/customer.controller';
+import { PropertyController } from './controllers/property.controller';
+import { BookingController } from './controllers/booking.controller';
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
-  controllers: [AuthenticateController, CustomerController],
+  controllers: [
+    AuthenticateController,
+    CustomerController,
+    PropertyController,
+    BookingController,
+  ],
   providers: [
     AuthenticateCustomerUseCase,
     CancelBookingUseCase,

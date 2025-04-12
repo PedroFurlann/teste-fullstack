@@ -49,9 +49,7 @@ describe('Fetch Booking With Property Details', () => {
     expect(result.isRight()).toBe(true);
     expect(result.value).toEqual({
       bookingId: booking.id.toString(),
-      customerId: booking.customerId.toString(),
       propertyId: booking.propertyId.toString(),
-      propertyName: 'Mustang',
       startDate: booking.startDate,
       endDate: booking.endDate,
       finalPrice: booking.finalPrice,

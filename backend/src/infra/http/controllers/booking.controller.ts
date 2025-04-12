@@ -33,6 +33,7 @@ import { BookingTimeOutsideAllowedRangeError } from '../../../domain/rental/appl
 import { PropertyNotFoundError } from '../../../domain/rental/application/use-cases/errors/property-not-found-error';
 import { BookingWithPropertyDetailsPresenter } from '../presenters/booking-with-property-details-presenter';
 import { CustomerBookingsWithPropertyNamePresenter } from '../presenters/customer-bookings-with-property-name-presenter';
+import { InvalidDateError } from 'src/domain/rental/application/use-cases/errors/invalid-date-error';
 
 const createBookingBodySchema = z.object({
   propertyId: z.string(),
@@ -81,6 +82,11 @@ export class BookingController {
       switch (error.constructor) {
         case PropertyNotFoundError:
           throw new NotFoundException({ status: 404, message: error.message });
+        case InvalidDateError:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
         case BookingDateConflictError:
           throw new ConflictException({ status: 409, message: error.message });
         case BookingTimeOutsideAllowedRangeError:
@@ -131,6 +137,11 @@ export class BookingController {
         case BookingDoesNotBelongToCustomerError:
           throw new ForbiddenException({ status: 403, message: error.message });
         case BookingDateConflictError:
+        case InvalidDateError:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
           throw new ConflictException({ status: 409, message: error.message });
         case BookingTimeOutsideAllowedRangeError:
           throw new BadRequestException({
@@ -249,7 +260,7 @@ export class BookingController {
     };
   }
 
-  @Get('/')
+  @Get('/customer')
   async fetchCustomerBookingsWithPropertyName(
     @CurrentUser() user: UserPayload,
   ) {

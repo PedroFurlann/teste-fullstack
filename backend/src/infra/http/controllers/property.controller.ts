@@ -31,6 +31,8 @@ import { PropertyDoesNotBelongToCustomerError } from '../../../domain/rental/app
 import { PropertyHasActiveBookingsError } from '../../../domain/rental/application/use-cases/errors/property-has-active-bookings-error';
 
 import { InvalidDataValidationPipe } from '../pipes/invalid-data-validation.pipe';
+import { InvalidTimeError } from '../../../domain/rental/application/use-cases/errors/invalid-time-error';
+import { InvalidDateError } from '../../../domain/rental/application/use-cases/errors/invalid-date-error';
 
 const createPropertyBodySchema = z.object({
   name: z.string(),
@@ -89,6 +91,23 @@ export class PropertyController {
       pricePerHour: body.pricePerHour,
     });
 
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case InvalidTimeError:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
+        default:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
+      }
+    }
+
     const { property } = result.value;
 
     return {
@@ -123,17 +142,34 @@ export class PropertyController {
     const startDate = new Date(query.startDate);
     const endDate = new Date(query.endDate);
 
+    const result = await this.fetchAvailablePropertiesUseCase.execute({
+      startDate,
+      endDate,
+    });
+
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case InvalidDateError:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
+        default:
+          throw new BadRequestException({
+            status: 400,
+            message: error.message,
+          });
+      }
+    }
+
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
       throw new BadRequestException({
         status: 400,
         message: 'Formato de data inválido',
       });
     }
-
-    const result = await this.fetchAvailablePropertiesUseCase.execute({
-      startDate,
-      endDate,
-    });
 
     const { properties } = result.value;
 
@@ -206,6 +242,11 @@ export class PropertyController {
         case PropertyDoesNotBelongToCustomerError:
           throw new ForbiddenException({
             status: 403,
+            message: error.message,
+          });
+        case InvalidTimeError:
+          throw new BadRequestException({
+            status: 400,
             message: error.message,
           });
         default:

@@ -6,6 +6,7 @@ import { UniqueEntityID } from '../../../../../core/entities/unique-entity-id';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
 import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outside-allowed-range-error';
 import { BookingDateConflictError } from '../errors/booking-date-conflict-error';
+import { InvalidDateError } from '../errors/invalid-date-error';
 
 interface CreateBookingUseCaseRequest {
   customerId: string;
@@ -17,6 +18,7 @@ interface CreateBookingUseCaseRequest {
 type CreateBookingUseCaseResponse = Either<
   | PropertyNotFoundError
   | BookingDateConflictError
+  | InvalidDateError
   | BookingTimeOutsideAllowedRangeError,
   {
     booking: Booking;
@@ -39,6 +41,10 @@ export class CreateBookingUseCase {
 
     if (!property) {
       return left(new PropertyNotFoundError());
+    }
+
+    if (startDate >= endDate) {
+      return left(new InvalidDateError());
     }
 
     const existingBookings =

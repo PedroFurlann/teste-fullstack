@@ -1,7 +1,8 @@
-import { Either, right } from '../../../../../core/either';
+import { Either, left, right } from '../../../../../core/either';
 import { Property } from '../../../enterprise/entities/property';
 import { PropertyRepository } from '../../repositories/property-repository';
 import { Injectable } from '@nestjs/common';
+import { InvalidDateError } from '../errors/invalid-date-error';
 
 interface FetchAvailablePropertiesUseCaseRequest {
   startDate: Date;
@@ -9,7 +10,7 @@ interface FetchAvailablePropertiesUseCaseRequest {
 }
 
 type FetchAvailablePropertiesUseCaseResponse = Either<
-  null,
+  InvalidDateError,
   {
     properties: Property[];
   }
@@ -23,6 +24,10 @@ export class FetchAvailablePropertiesUseCase {
     startDate,
     endDate,
   }: FetchAvailablePropertiesUseCaseRequest): Promise<FetchAvailablePropertiesUseCaseResponse> {
+    if (startDate >= endDate) {
+      return left(new InvalidDateError());
+    }
+
     const properties = await this.propertyRepository.findAllAvailable(
       startDate,
       endDate,
