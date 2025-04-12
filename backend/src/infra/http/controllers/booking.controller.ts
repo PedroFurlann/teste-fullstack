@@ -33,17 +33,30 @@ import { BookingTimeOutsideAllowedRangeError } from '../../../domain/rental/appl
 import { PropertyNotFoundError } from '../../../domain/rental/application/use-cases/errors/property-not-found-error';
 import { BookingWithPropertyDetailsPresenter } from '../presenters/booking-with-property-details-presenter';
 import { CustomerBookingsWithPropertyNamePresenter } from '../presenters/customer-bookings-with-property-name-presenter';
-import { InvalidDateError } from 'src/domain/rental/application/use-cases/errors/invalid-date-error';
+import { InvalidDateError } from '../../../domain/rental/application/use-cases/errors/invalid-date-error';
+import { NotAllowedEditCanceledBookingError } from '../../../domain/rental/application/use-cases/errors/not-allowed-edit-canceled-booking-error';
+import { BookingAlreadyCanceledError } from '../../../domain/rental/application/use-cases/errors/booking-already-canceled-error';
+import { DateCannotBeRetroactiveError } from 'src/domain/rental/application/use-cases/errors/date-cannot-be-retroactive-error';
+
+const now = new Date();
 
 const createBookingBodySchema = z.object({
   propertyId: z.string().uuid('ID da propriedade inválido'),
-  startDate: z.coerce.date(),
-  endDate: z.coerce.date(),
+  startDate: z.coerce
+    .date()
+    .min(now, 'A data inicial não pode ser retroativa.'),
+  endDate: z.coerce.date().min(now, 'A data final não pode ser retroativa.'),
 });
 
 const editBookingBodySchema = z.object({
-  startDate: z.coerce.date().optional(),
-  endDate: z.coerce.date().optional(),
+  startDate: z.coerce
+    .date()
+    .min(now, 'A data inicial não pode ser retroativa.')
+    .optional(),
+  endDate: z.coerce
+    .date()
+    .min(now, 'A data final não pode ser retroativa.')
+    .optional(),
 });
 
 type CreateBookingBody = z.infer<typeof createBookingBodySchema>;
@@ -90,6 +103,7 @@ export class BookingController {
         case BookingDateConflictError:
           throw new ConflictException({ status: 409, message: error.message });
         case BookingTimeOutsideAllowedRangeError:
+        case DateCannotBeRetroactiveError:
           throw new BadRequestException({
             status: 400,
             message: error.message,
@@ -135,14 +149,15 @@ export class BookingController {
         case PropertyNotFoundError:
           throw new NotFoundException({ status: 404, message: error.message });
         case BookingDoesNotBelongToCustomerError:
+        case NotAllowedEditCanceledBookingError:
           throw new ForbiddenException({ status: 403, message: error.message });
         case BookingDateConflictError:
         case InvalidDateError:
+        case DateCannotBeRetroactiveError:
           throw new BadRequestException({
             status: 400,
             message: error.message,
           });
-          throw new ConflictException({ status: 409, message: error.message });
         case BookingTimeOutsideAllowedRangeError:
           throw new BadRequestException({
             status: 400,
@@ -184,6 +199,7 @@ export class BookingController {
         case BookingNotFoundError:
           throw new NotFoundException({ status: 404, message: error.message });
         case BookingDoesNotBelongToCustomerError:
+        case BookingAlreadyCanceledError:
           throw new ForbiddenException({ status: 403, message: error.message });
         default:
           throw new BadRequestException({
@@ -228,10 +244,7 @@ export class BookingController {
       }
     }
 
-    return {
-      status: 204,
-      message: 'Reserva deletada com sucesso!',
-    };
+    return;
   }
 
   @Get('/customer')

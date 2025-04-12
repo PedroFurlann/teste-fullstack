@@ -213,6 +213,6 @@ export class CustomerController {
       }
     }
 
-    return { status: 204, message: 'Cliente deletado com sucesso!' };
+    return;
   }
 }

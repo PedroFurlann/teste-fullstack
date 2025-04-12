@@ -42,10 +42,7 @@ export class DeletePropertyUseCase {
     const bookings = await this.bookingRepository.findByPropertyId(propertyId);
     const now = new Date();
     const hasActiveBooking = bookings.some(
-      (booking) =>
-        booking.status === 'confirmed' &&
-        now >= booking.startDate &&
-        now <= booking.endDate,
+      (booking) => booking.status === 'confirmed' && now <= booking.endDate,
     );
 
     if (hasActiveBooking) {

@@ -286,7 +286,7 @@ export class PropertyController {
   @HttpCode(204)
   async deleteProperty(
     @CurrentUser() user: UserPayload,
-    @Query('id') id: string,
+    @Param('id') id: string,
   ) {
     const customerId = user.sub;
 
@@ -322,6 +322,6 @@ export class PropertyController {
       }
     }
 
-    return { status: 204, message: 'Propriedade deletada com sucesso!' };
+    return;
   }
 }

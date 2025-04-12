@@ -9,6 +9,8 @@ import { BookingNotFoundError } from '../errors/booking-not-found-error';
 import { BookingDoesNotBelongToCustomerError } from '../errors/booking-does-not-belong-to-customer-error';
 import { InvalidDateError } from '../errors/invalid-date-error';
 import { Injectable } from '@nestjs/common';
+import { NotAllowedEditCanceledBookingError } from '../errors/not-allowed-edit-canceled-booking-error';
+import { DateCannotBeRetroactiveError } from '../errors/date-cannot-be-retroactive-error';
 
 interface EditBookingUseCaseRequest {
   bookingId: string;
@@ -23,7 +25,8 @@ type EditBookingUseCaseResponse = Either<
   | BookingDateConflictError
   | InvalidDateError
   | BookingTimeOutsideAllowedRangeError
-  | BookingDoesNotBelongToCustomerError,
+  | BookingDoesNotBelongToCustomerError
+  | NotAllowedEditCanceledBookingError,
   {
     booking: Booking;
   }
@@ -60,6 +63,10 @@ export class EditBookingUseCase {
       return left(new PropertyNotFoundError());
     }
 
+    if (booking.status === 'canceled') {
+      return left(new NotAllowedEditCanceledBookingError());
+    }
+
     const hasConflict = (
       await this.bookingRepository.findByPropertyId(property.id.toString())
     ).some((b) => {
@@ -94,6 +101,10 @@ export class EditBookingUseCase {
 
     if (booking.startDate >= booking.endDate) {
       return left(new InvalidDateError());
+    }
+
+    if (booking.startDate < new Date() || booking.endDate < new Date()) {
+      return left(new DateCannotBeRetroactiveError());
     }
 
     await this.bookingRepository.update(booking);

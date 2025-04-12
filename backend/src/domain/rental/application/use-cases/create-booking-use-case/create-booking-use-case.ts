@@ -8,6 +8,7 @@ import { BookingTimeOutsideAllowedRangeError } from '../errors/booking-time-outs
 import { BookingDateConflictError } from '../errors/booking-date-conflict-error';
 import { InvalidDateError } from '../errors/invalid-date-error';
 import { Injectable } from '@nestjs/common';
+import { DateCannotBeRetroactiveError } from '../errors/date-cannot-be-retroactive-error';
 
 interface CreateBookingUseCaseRequest {
   customerId: string;
@@ -72,6 +73,10 @@ export class CreateBookingUseCase {
       durationInHours > property.maxTime
     ) {
       return left(new BookingTimeOutsideAllowedRangeError());
+    }
+
+    if (startDate < new Date() || endDate < new Date()) {
+      return left(new DateCannotBeRetroactiveError());
     }
 
     const finalPrice = durationInHours * property.pricePerHour;

@@ -40,7 +40,7 @@ model Locacao {
   dataAtualizacao DateTime @updatedAt @map("data_atualizacao")
 
   Reserva Reserva[]
-  cliente Cliente   @relation(fields: [clienteId], references: [id])
+  cliente Cliente   @relation(fields: [clienteId], references: [id], onDelete: Cascade)
 }
 
 model Reserva {
@@ -54,6 +54,6 @@ model Reserva {
   dataCriacao     DateTime @default(now()) @map("data_criacao")
   dataAtualizacao DateTime @updatedAt @map("data_atualizacao")
 
-  cliente Cliente @relation(fields: [clienteId], references: [id])
-  locacao Locacao @relation(fields: [locacaoId], references: [id])
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  locacao Locacao @relation(fields: [locacaoId], references: [id], onDelete: Cascade)
 }
