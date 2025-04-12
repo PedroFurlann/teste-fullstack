@@ -51,8 +51,8 @@ const editPropertyBodySchema = z.object({
 });
 
 const fetchAvailableQuerySchema = z.object({
-  startDate: z.string(),
-  endDate: z.string(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
 });
 
 type CreatePropertyBody = z.infer<typeof createPropertyBodySchema>;
