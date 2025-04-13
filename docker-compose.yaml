@@ -1,6 +1,31 @@
 version: '3.3'
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: "npm run dev"
+    volumes:
+      - ./frontend/src:/app/src
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "mysql://root:password@db:3306/accurate"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run start:dev"
+
   db:
     image: mysql:5.7
     restart: always
