@@ -9,14 +9,14 @@ export function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-950 overflow-y-auto">
+    <div className="min-h-screen flex flex-col bg-gray-900 overflow-y-auto">
       <AuthNavbar />
 
       <motion.div
         className="px-6 py-20 flex-grow w-full text-center flex flex-col items-center justify-center min-h-full"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Bem-vindo ao sistema de <span className="text-purple-500">locações</span>

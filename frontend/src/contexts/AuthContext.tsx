@@ -14,6 +14,7 @@ import {
 } from "../storage/storageToken";
 import { UserDTO } from "../DTOs/UserDTO";
 import { api } from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export interface AuthContextDataProps {
   user: UserDTO;
@@ -36,6 +37,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] =
     useState(true);
 
+  const navigate = useNavigate();
+  
   async function userAndTokenUpdate(userData: UserDTO, token: string) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
@@ -65,14 +68,14 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         api.defaults.headers.common["Authorization"] = `Bearer ${data.access_token}`;
       }
 
-      const { token } = storageTokenGet();
+      const storedTokenData = storageTokenGet();
       
-      if (token) {
+      if (storedTokenData?.token) {
         const user = await getUser();
-
-        await storageUserAndTokenSave(user, token);
-
-        await userAndTokenUpdate(user, token);
+      
+        storageUserAndTokenSave(user, storedTokenData.token);
+      
+        userAndTokenUpdate(user, storedTokenData.token);
       }
     } catch (error) {
       throw error;
@@ -126,10 +129,10 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       setIsLoadingUserStorageData(true);
 
       const userLogged = storageUserGet();
-      const { token } = storageTokenGet();
+      const storedTokenData = storageTokenGet();
 
-      if (token && userLogged) {
-        userAndTokenUpdate(userLogged, token);
+      if (storedTokenData?.token && userLogged) {
+        userAndTokenUpdate(userLogged, storedTokenData.token);
       }
     } catch (error) {
       throw error;
@@ -143,12 +146,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   }, []);
 
   useEffect(() => {
-    const subscribe = api.registerInterceptTokenManager(signOut);
+    const subscribe = api.registerInterceptTokenManager(signOut, navigate);
 
     return () => {
       subscribe();
     };
-  }, [signOut]);
+  }, [signOut, navigate]);
 
   return (
     <AuthContext.Provider

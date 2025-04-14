@@ -90,6 +90,8 @@ export default function Register() {
       await api.post("/customers", userData);
       await signIn("email", email, password);
 
+      navigate("/available-properties");
+
       toast.success("Usuário criado com sucesso!", {
         position: "top-right",
         autoClose: 3000,
@@ -124,11 +126,11 @@ export default function Register() {
   }
 
   return isLoadingUserStorageData ? (
-    <div className="min-h-screen flex flex-col bg-zinc-950 overflow-y-auto items-center justify-center">
+    <div className="min-h-screen flex flex-col bg-gray-900 overflow-y-auto items-center justify-center">
       <Loader />
     </div>
   ) : (
-    <div className="min-h-screen flex flex-col bg-zinc-950 overflow-y-auto">
+    <div className="min-h-screen flex flex-col bg-gray-900 overflow-y-auto">
       <AuthNavBar />
       <div className="px-6 py-20 flex flex-col items-center justify-center flex-grow md:flex-row gap-12 md:gap-24">
         <motion.div

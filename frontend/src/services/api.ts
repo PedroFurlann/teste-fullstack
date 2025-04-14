@@ -3,29 +3,37 @@ import { storageTokenGet } from "../storage/storageToken";
 import { AppError } from "../utils/AppError";
 
 type SignOut = () => void;
+type Navigate = (to: string) => void;
+
 
 type APIInstanceProps = AxiosInstance & {
-  registerInterceptTokenManager: (signOut: SignOut) => () => void;
+  registerInterceptTokenManager: (signOut: SignOut, navigate?: Navigate) => () => void;
 };
 
 const api = axios.create({
   baseURL: "http://localhost:3000",
 }) as APIInstanceProps;
 
-api.registerInterceptTokenManager = (signOut) => {
+api.registerInterceptTokenManager = (signOut, navigate) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
     async (requestError) => {
-      const token = storageTokenGet();
-
-      if (token) {
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      const storedTokenData = storageTokenGet();
+      
+      if (storedTokenData?.token) {
+        api.defaults.headers.common["Authorization"] = `Bearer ${storedTokenData.token}`;
       }
 
       if (
         requestError.response?.status === 401 &&
         requestError.response.data.message !== "Crendenciais inválidas."
       ) {
+        if (navigate) {
+          navigate("/login");
+        } else {
+          window.location.href = "/login";
+        }
+
         signOut();
       }
 

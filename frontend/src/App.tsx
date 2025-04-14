@@ -1,15 +1,17 @@
-import { BrowserRouter } from "react-router-dom"
-import { AuthRoutes } from "./routes/auth.routes"
-import { AuthContextProvider } from "./contexts/AuthContext"
+import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { AuthContextProvider } from "./contexts/AuthContext";
+import { Routes } from "./routes";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        <AuthRoutes />
+        <ToastContainer />
+        <Routes />
       </AuthContextProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

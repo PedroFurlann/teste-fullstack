@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { List } from "phosphor-react";
-import Logo from '../../public/logo-icon.svg';
+import Logo from '../assets/logo-icon.svg';
 import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
@@ -37,8 +37,8 @@ const Navbar: React.FC = () => {
     <div className="w-full h-24 bg-black flex items-center pl-8 gap-6 justify-between"
       style={{ boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4)' }}
     >
-      <div className="cursor-pointer" onClick={() => navigate('/')}>
-        <img alt="Accurate logo" src={Logo} className="bg-transparent cursor-pointer" width={180} height={180} />
+      <div className="cursor-pointer" onClick={() => navigate('/available-properties')}>
+        <img alt="Accurate logo" src={Logo} className="bg-transparent cursor-pointer" width={60} height={60} />
       </div>
 
       <div>
@@ -56,23 +56,13 @@ const Navbar: React.FC = () => {
             style={{ transform: "translateX(-10%)" }}
           >
 
-            <a key={"Register"}>
+            <a key={"Alugar"}>
               <p 
                 className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/available-properties')}
               >
                 
-                Cadastrar-se
-              </p>
-            </a>
-
-
-            <a key={"Login"}>
-              <p 
-                className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
-                onClick={() => navigate('/login')}
-              >
-                Login
+                Alugar
               </p>
             </a>
 
