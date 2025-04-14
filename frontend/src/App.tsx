@@ -1,8 +1,14 @@
+import { BrowserRouter } from "react-router-dom"
+import { AuthRoutes } from "./routes/auth.routes"
+import { AuthContextProvider } from "./contexts/AuthContext"
+
 function App() {
   return (
-    <>
-    <div>accurate</div>
-    </>
+    <BrowserRouter>
+      <AuthContextProvider>
+        <AuthRoutes />
+      </AuthContextProvider>
+    </BrowserRouter>
   )
 }
 

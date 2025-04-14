@@ -1,4 +1,8 @@
 export function formatCPF(value: string): string {
+  if (!value) {
+    return '';
+  }
+
   const digits = value.replace(/\D/g, '');
 
   return digits
@@ -9,6 +13,10 @@ export function formatCPF(value: string): string {
 }
 
 export function safeFormatCPF(value: string): string {
+  if (!value) {
+    return '';
+  }
+
   const digits = value.replace(/\D/g, '');
 
   const isOnlyNumbers = /^\d+$/.test(value);

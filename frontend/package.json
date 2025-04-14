@@ -14,6 +14,7 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.4.7",
+    "lottie-react": "^2.4.1",
     "phosphor-react": "^1.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
