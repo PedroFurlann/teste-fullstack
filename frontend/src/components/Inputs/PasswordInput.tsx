@@ -28,13 +28,13 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ value, placeholder = 'Dig
         `}
       />
       {showPassword ? (
-        <Eye
+        <EyeSlash
           className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700"
           size={20}
           onClick={handleTogglePassword}
         />
       ) : (
-        <EyeSlash
+        <Eye
           className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-700"
           size={20}
           onClick={handleTogglePassword}

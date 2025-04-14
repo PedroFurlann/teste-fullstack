@@ -1,26 +1,28 @@
 import { motion } from "framer-motion";
-import AuthNavBar from "../../components/AuthNavBar";
+import AuthNavBar from "../../../components/AuthNavBar";
 import Lottie from "lottie-react";
-import agreeAnimation from "../../lib/lottie/agree.json";
+import agreeAnimation from "../../../lib/lottie/agree.json";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../../hooks/useAuth";
-import { AppError } from "../../utils/AppError";
+import { useAuth } from "../../../hooks/useAuth";
+import { AppError } from "../../../utils/AppError";
 import { toast } from "react-toastify";
-import Loader from "../../components/Loader";
-import useWindowSize from "../../hooks/useWindowsSize";
+import Loader from "../../../components/Loader";
+import useWindowSize from "../../../hooks/useWindowsSize";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
-import TextInput from "../../components/Inputs/TextInput";
-import { formatCPF } from "../../utils/formatCPF";
-import PasswordInput from "../../components/Inputs/PasswordInput";
-import LoginTypeRadioInput from "../../components/Inputs/LoginTypeRadioButton";
+import Button from "../../../components/Button";
+import TextInput from "../../../components/Inputs/TextInput";
+import { formatCPF } from "../../../utils/formatCPF";
+import PasswordInput from "../../../components/Inputs/PasswordInput";
+import LoginTypeRadioInput from "../../../components/Inputs/LoginTypeRadioButton";
+import { useState } from "react";
 
 
 export default function Login() {
   const { isMobile } = useWindowSize();
   const { signIn, isLoadingUserStorageData } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const validationSchema = yup.object().shape({
@@ -37,11 +39,14 @@ export default function Login() {
         then: (schema) =>
           schema
             .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
-            .required('CPF é obrigatório'),
+            .required('O CPF é obrigatório'),
         otherwise: (schema) =>
           schema
-            .email('E-mail inválido')
-            .required('E-mail é obrigatório'),
+            .matches(
+              /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+              "Email inválido"
+            )
+            .required('O E-mail é obrigatório'),
       }),
 
     password: yup
@@ -67,8 +72,11 @@ export default function Login() {
   });
 
   async function handleSignIn({ type, identifier, password }: FormData) {
+    setIsSubmitting(true);
+
+    const formattedIdentifier = type === "cpf" ? identifier.replace(/\D/g, "") : identifier;
+
     try {
-      const formattedIdentifier = type === "cpf" ? identifier.replace(/\D/g, "") : identifier;
 
       await signIn(type, formattedIdentifier, password);
 
@@ -100,6 +108,8 @@ export default function Login() {
           fontWeight: "bold",
         },
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -225,8 +235,9 @@ export default function Login() {
             whileTap={{ scale: 0.98 }}
           >
             <Button
-              label="Entrar"
+              label={isSubmitting ? "Logando..." : "Entrar"}
               onClick={handleSubmit(handleSignIn)}
+              disabled={isSubmitting}
               style={{ marginTop: 10 }}
             />
           </motion.div>
@@ -237,8 +248,8 @@ export default function Login() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
           >
-            <p className="font-bold text-md text-gray-200">
-              Ainda não tem conta?
+            <p className="font-bold text-center text-md text-gray-200">
+              Ainda não possui uma conta?
               <p
                 onClick={() => navigate("/register")}
                 className="text-violet-600 text-center text-md hover:cursor-pointer font-bold hover:opacity-70 transition-all ease-in-out duration-300"
