@@ -68,10 +68,24 @@ const editPropertyBodySchema = z.object({
     .optional(),
 });
 
-const fetchAvailableQuerySchema = z.object({
-  startDate: z.coerce.date(),
-  endDate: z.coerce.date(),
-});
+const fetchAvailableQuerySchema = z
+  .object({
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    type: z.string().optional(),
+    orderBy: z.enum(['pricePerHour', 'name', 'description', 'type']).optional(),
+    orderDirection: z.enum(['asc', 'desc']).optional(),
+  })
+  .refine(
+    (data) => {
+      return data.startDate < data.endDate;
+    },
+    {
+      message: 'A data de início deve ser menor que a data de término',
+    },
+  );
 
 type CreatePropertyBody = z.infer<typeof createPropertyBodySchema>;
 type EditPropertyBody = z.infer<typeof editPropertyBodySchema>;
@@ -161,6 +175,11 @@ export class PropertyController {
     const result = await this.fetchAvailablePropertiesUseCase.execute({
       startDate,
       endDate,
+      name: query.name,
+      description: query.description,
+      type: query.type,
+      orderBy: query.orderBy,
+      orderDirection: query.orderDirection,
     });
 
     if (result.isLeft()) {

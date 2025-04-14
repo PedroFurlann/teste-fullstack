@@ -32,8 +32,8 @@ describe('Create Booking', () => {
 
     await inMemoryPropertyRepository.create(property);
 
-    const startDate = new Date('2025-05-01T10:00:00Z');
-    const endDate = new Date('2025-05-01T12:00:00Z');
+    const startDate = new Date('2025-05-30T10:00:00Z');
+    const endDate = new Date('2025-05-30T12:00:00Z');
 
     const result = await sut.execute({
       customerId: 'customer-01',
@@ -77,8 +77,8 @@ describe('Create Booking', () => {
     const existingBooking = makeBooking({
       customerId: new UniqueEntityID('customer-01'),
       propertyId: property.id,
-      startDate: new Date('2025-05-01T14:00:00Z'),
-      endDate: new Date('2025-05-01T16:00:00Z'),
+      startDate: new Date('2025-05-30T14:00:00Z'),
+      endDate: new Date('2025-05-30T16:00:00Z'),
     });
 
     await inMemoryBookingRepository.create(existingBooking);
@@ -86,8 +86,8 @@ describe('Create Booking', () => {
     const result = await sut.execute({
       customerId: 'customer-02',
       propertyId: property.id.toString(),
-      startDate: new Date('2025-05-01T15:00:00Z'),
-      endDate: new Date('2025-05-01T17:00:00Z'),
+      startDate: new Date('2025-05-30T15:00:00Z'),
+      endDate: new Date('2025-05-30T17:00:00Z'),
     });
 
     expect(result.isLeft()).toBe(true);
@@ -106,8 +106,8 @@ describe('Create Booking', () => {
     const result = await sut.execute({
       customerId: 'customer-03',
       propertyId: property.id.toString(),
-      startDate: new Date('2025-05-01T10:00:00Z'),
-      endDate: new Date('2025-05-01T11:00:00Z'),
+      startDate: new Date('2025-05-30T10:00:00Z'),
+      endDate: new Date('2025-05-30T11:00:00Z'),
     });
 
     expect(result.isLeft()).toBe(true);
@@ -126,8 +126,8 @@ describe('Create Booking', () => {
     const result = await sut.execute({
       customerId: 'customer-04',
       propertyId: property.id.toString(),
-      startDate: new Date('2025-05-01T12:00:00Z'),
-      endDate: new Date('2025-05-01T10:00:00Z'),
+      startDate: new Date('2025-05-30T12:00:00Z'),
+      endDate: new Date('2025-05-30T10:00:00Z'),
     });
 
     expect(result.isLeft()).toBe(true);

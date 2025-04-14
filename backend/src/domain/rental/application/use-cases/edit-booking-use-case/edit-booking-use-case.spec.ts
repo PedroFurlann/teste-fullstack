@@ -32,24 +32,24 @@ describe('Edit Booking', () => {
 
     const booking = makeBooking({
       propertyId: property.id,
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking);
 
     const result = await sut.execute({
       bookingId: booking.id.toString(),
       customerId: booking.customerId.toString(),
-      startDate: new Date('2025-04-10T11:00:00'),
-      endDate: new Date('2025-04-10T14:00:00'),
+      startDate: new Date('2025-05-30T11:00:00'),
+      endDate: new Date('2025-05-30T14:00:00'),
     });
 
     expect(result.isRight()).toBe(true);
 
     if (result.isRight()) {
       const { booking } = result.value;
-      expect(booking.startDate).toEqual(new Date('2025-04-10T11:00:00'));
-      expect(booking.endDate).toEqual(new Date('2025-04-10T14:00:00'));
+      expect(booking.startDate).toEqual(new Date('2025-05-30T11:00:00'));
+      expect(booking.endDate).toEqual(new Date('2025-05-30T14:00:00'));
       expect(booking.finalPrice).toBe(300);
     }
   });
@@ -64,16 +64,16 @@ describe('Edit Booking', () => {
 
     const booking = makeBooking({
       propertyId: property.id,
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking);
 
     const result = await sut.execute({
       bookingId: booking.id.toString(),
       customerId: '1234',
-      startDate: new Date('2025-04-10T13:00:00'),
-      endDate: new Date('2025-04-10T15:00:00'),
+      startDate: new Date('2025-05-30T13:00:00'),
+      endDate: new Date('2025-05-30T15:00:00'),
     });
 
     expect(result.isLeft()).toBe(true);
@@ -90,23 +90,23 @@ describe('Edit Booking', () => {
 
     const booking1 = makeBooking({
       propertyId: property.id,
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking1);
 
     const booking2 = makeBooking({
       propertyId: property.id,
-      startDate: new Date('2025-04-10T11:00:00'),
-      endDate: new Date('2025-04-10T13:00:00'),
+      startDate: new Date('2025-05-30T11:00:00'),
+      endDate: new Date('2025-05-30T13:00:00'),
     });
     await inMemoryBookingRepository.create(booking2);
 
     const result = await sut.execute({
       bookingId: booking1.id.toString(),
       customerId: booking1.customerId.toString(),
-      startDate: new Date('2025-04-10T11:30:00'),
-      endDate: new Date('2025-04-10T13:30:00'),
+      startDate: new Date('2025-05-30T11:30:00'),
+      endDate: new Date('2025-05-30T13:30:00'),
     });
 
     expect(result.isLeft()).toBe(true);
@@ -123,16 +123,16 @@ describe('Edit Booking', () => {
 
     const booking = makeBooking({
       propertyId: property.id,
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking);
 
     const result = await sut.execute({
       bookingId: booking.id.toString(),
       customerId: booking.customerId.toString(),
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T11:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T11:00:00'),
     });
 
     expect(result.isLeft()).toBe(true);
@@ -143,8 +143,8 @@ describe('Edit Booking', () => {
     const result = await sut.execute({
       bookingId: '1234',
       customerId: '123',
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
 
     expect(result.isLeft()).toBe(true);

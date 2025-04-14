@@ -40,13 +40,22 @@ import { DateCannotBeRetroactiveError } from 'src/domain/rental/application/use-
 
 const now = new Date();
 
-const createBookingBodySchema = z.object({
-  propertyId: z.string().uuid('ID da propriedade inválido'),
-  startDate: z.coerce
-    .date()
-    .min(now, 'A data inicial não pode ser retroativa.'),
-  endDate: z.coerce.date().min(now, 'A data final não pode ser retroativa.'),
-});
+const createBookingBodySchema = z
+  .object({
+    propertyId: z.string().uuid('ID da propriedade inválido'),
+    startDate: z.coerce
+      .date()
+      .min(now, 'A data inicial não pode ser retroativa.'),
+    endDate: z.coerce.date().min(now, 'A data final não pode ser retroativa.'),
+  })
+  .refine(
+    (data) => {
+      return data.startDate < data.endDate;
+    },
+    {
+      message: 'A data de início deve ser menor que a data de término',
+    },
+  );
 
 const editBookingBodySchema = z.object({
   startDate: z.coerce

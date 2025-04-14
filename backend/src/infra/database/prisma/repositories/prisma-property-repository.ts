@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { PropertyRepository } from '../../../../domain/rental/application/repositories/property-repository';
+import {
+  FindAllAvailablePropertiesOptions,
+  PropertyRepository,
+} from '../../../../domain/rental/application/repositories/property-repository';
 import { Property } from '../../../../domain/rental/enterprise/entities/property';
 import { PrismaPropertyMapper } from '../mappers/prisma-property-mapper';
 
@@ -16,25 +19,53 @@ export class PrismaPropertyRepository implements PropertyRepository {
     });
   }
 
-  async findAllAvailable(startDate: Date, endDate: Date): Promise<Property[]> {
+  async findAllAvailable({
+    startDate,
+    endDate,
+    name,
+    description,
+    type,
+    orderBy,
+    orderDirection = 'asc',
+  }: FindAllAvailablePropertiesOptions): Promise<Property[]> {
     const properties = await this.prismaService.locacao.findMany({
       where: {
+        nome: name
+          ? {
+              contains: name,
+            }
+          : undefined,
+        descricao: description
+          ? {
+              contains: description,
+            }
+          : undefined,
+        tipo: type
+          ? {
+              contains: type,
+            }
+          : undefined,
         Reserva: {
           every: {
             OR: [
-              {
-                dataFim: { lt: startDate },
-              },
-              {
-                dataInicio: { gt: endDate },
-              },
-              {
-                situacao: { not: 'confirmed' },
-              },
+              { dataFim: { lt: startDate } },
+              { dataInicio: { gt: endDate } },
+              { situacao: { not: 'confirmed' } },
             ],
           },
         },
       },
+      orderBy: orderBy
+        ? {
+            [orderBy === 'pricePerHour'
+              ? 'valorHora'
+              : orderBy === 'name'
+                ? 'nome'
+                : orderBy === 'description'
+                  ? 'descricao'
+                  : 'tipo']: orderDirection,
+          }
+        : undefined,
     });
 
     return properties.map((property) =>

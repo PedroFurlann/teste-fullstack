@@ -2,7 +2,7 @@ import { Either, left, right } from '../../../../../core/either';
 import { PropertyRepository } from '../../repositories/property-repository';
 import { Injectable } from '@nestjs/common';
 import { PropertyNotFoundError } from '../errors/property-not-found-error';
-import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error'; // <- novo
+import { PropertyDoesNotBelongToCustomerError } from '../errors/property-does-not-belong-to-customer-error';
 import { Property } from '../../../../../domain/rental/enterprise/entities/property';
 import { InvalidTimeError } from '../errors/invalid-time-error';
 

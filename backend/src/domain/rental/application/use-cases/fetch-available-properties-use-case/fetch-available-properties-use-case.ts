@@ -7,6 +7,11 @@ import { InvalidDateError } from '../errors/invalid-date-error';
 interface FetchAvailablePropertiesUseCaseRequest {
   startDate: Date;
   endDate: Date;
+  name?: string;
+  description?: string;
+  type?: string;
+  orderBy?: 'pricePerHour' | 'name' | 'description' | 'type';
+  orderDirection?: 'asc' | 'desc';
 }
 
 type FetchAvailablePropertiesUseCaseResponse = Either<
@@ -23,15 +28,29 @@ export class FetchAvailablePropertiesUseCase {
   async execute({
     startDate,
     endDate,
+    name,
+    description,
+    type,
+    orderBy,
+    orderDirection,
   }: FetchAvailablePropertiesUseCaseRequest): Promise<FetchAvailablePropertiesUseCaseResponse> {
     if (startDate >= endDate) {
       return left(new InvalidDateError());
     }
 
-    const properties = await this.propertyRepository.findAllAvailable(
+    const nameInLowerCase = name?.toLowerCase();
+    const descriptionInLowerCase = description?.toLowerCase();
+    const typeInLowerCase = type?.toLowerCase();
+
+    const properties = await this.propertyRepository.findAllAvailable({
       startDate,
       endDate,
-    );
+      name: nameInLowerCase,
+      description: descriptionInLowerCase,
+      type: typeInLowerCase,
+      orderBy,
+      orderDirection,
+    });
 
     return right({ properties });
   }

@@ -15,8 +15,8 @@ describe('Cancel Booking', () => {
 
   it('should be able to cancel a booking', async () => {
     const booking = makeBooking({
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking);
 
@@ -36,8 +36,8 @@ describe('Cancel Booking', () => {
 
   it('should return an error if the booking does not belong to the customer', async () => {
     const booking = makeBooking({
-      startDate: new Date('2025-04-10T10:00:00'),
-      endDate: new Date('2025-04-10T12:00:00'),
+      startDate: new Date('2025-05-30T10:00:00'),
+      endDate: new Date('2025-05-30T12:00:00'),
     });
     await inMemoryBookingRepository.create(booking);
 
