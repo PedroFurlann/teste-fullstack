@@ -1,12 +1,19 @@
-import { PropertyDTO } from "../../../../DTOs/PropertyDTO";
+import { PropertyDTO } from "../DTOs/PropertyDTO";
 import { Buildings, Car, Money, Clock } from "phosphor-react";
 
 interface PropertyCardProps {
   property: PropertyDTO;
-  onBooking: (property: PropertyDTO) => void;
+  onAction: (property: PropertyDTO) => void;
+  onDelete?: (property: PropertyDTO) => void;
+  isBooking?: boolean;
 }
 
-export const PropertyCard = ({ property, onBooking }: PropertyCardProps) => {
+export const PropertyCard = ({
+  property,
+  onAction,
+  onDelete,
+  isBooking = false,
+}: PropertyCardProps) => {
   const typeLabel = property.type === "car" ? "Carro" : "Casa";
 
   return (
@@ -51,11 +58,23 @@ export const PropertyCard = ({ property, onBooking }: PropertyCardProps) => {
           </div>
         </div>
 
-        <button
-          onClick={() => onBooking(property)}
-          className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700">
-          Reservar
-        </button>
+        <div className="flex items-center gap-2 mt-4">
+          <button
+            onClick={() => onAction(property)}
+            className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
+          >
+            {isBooking ? "Reservar" : "Editar"}
+          </button>
+
+          {!isBooking && (
+            <button
+              onClick={() => onDelete?.(property)}
+              className="rounded-xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
+            >
+              Excluir
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

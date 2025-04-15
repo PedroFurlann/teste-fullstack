@@ -6,21 +6,23 @@ import TextInput from '../components/Inputs/TextInput';
 import NumberInput from '../components/Inputs/NumberInput';
 import Button from '../components/Button';
 import { X } from 'phosphor-react';
+import { PropertyDTO } from '../DTOs/PropertyDTO';
 
-interface CreatePropertyModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreate: (data: CreatePropertyFormData) => void;
-}
-
-export type CreatePropertyFormData = {
+export type EditPropertyFormData = {
   name: string;
   description: string;
-  type: 'car' | 'house';
+  type: string;
   minTime: number;
   maxTime: number;
   pricePerHour: number;
 };
+
+interface EditPropertyModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  property: PropertyDTO;
+  onUpdate: (data: EditPropertyFormData) => void;
+}
 
 const schema = yup.object().shape({
   name: yup
@@ -33,7 +35,6 @@ const schema = yup.object().shape({
     .min(5, 'A descrição deve ter pelo menos 5 caracteres'),
   type: yup
     .string()
-    .oneOf(['car', 'house'])
     .required('O tipo é obrigatório'),
   minTime: yup
     .number()
@@ -41,37 +42,37 @@ const schema = yup.object().shape({
     .required('O tempo mínimo é obrigatório'),
   maxTime: yup
     .number()
-    .min(1, 'O tempo máximo deve ser pelo de 1 hora')
+    .min(1, 'O tempo máximo deve ser pelo menos de 1 hora')
     .required('O tempo máximo é obrigatório')
-    .test(
-      'is-greater',
-      'O tempo máximo deve ser maior ou igual ao tempo mínimo',
-      function (value) {
-        const { minTime } = this.parent;
-        return value >= minTime;
-      }
-    ),
-  pricePerHour: yup.number().min(1, 'O preço por hora deve ser pelo menos de 1 (R$)').required('O preço por hora é obrigatório'),
+    .test('is-greater', 'O tempo máximo deve ser maior ou igual ao tempo mínimo', function (value) {
+      const { minTime } = this.parent;
+      return value >= minTime;
+    }),
+  pricePerHour: yup
+    .number()
+    .min(1, 'O preço por hora deve ser pelo menos de 1 (R$)')
+    .required('O preço por hora é obrigatório'),
 });
 
-export const CreatePropertyModal = ({
+export const EditPropertyModal = ({
   isOpen,
   onClose,
-  onCreate,
-}: CreatePropertyModalProps) => {
+  property,
+  onUpdate,
+}: EditPropertyModalProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreatePropertyFormData>({
+  } = useForm<EditPropertyFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: '',
-      description: '',
-      type: 'car',
-      minTime: 1,
-      maxTime: 1,
-      pricePerHour: 1,
+      description: property.description,
+      name: property.name,
+      type: property.type,
+      minTime: property.minTime,
+      maxTime: property.maxTime,
+      pricePerHour: property.pricePerHour,
     },
   });
 
@@ -83,8 +84,8 @@ export const CreatePropertyModal = ({
     }
   };
 
-  const onSubmit = (data: CreatePropertyFormData) => {
-    onCreate(data);
+  const onSubmit = (data: EditPropertyFormData) => {
+    onUpdate(data);
     onClose();
   };
 
@@ -117,7 +118,7 @@ export const CreatePropertyModal = ({
           <X size={20} weight="bold" className="text-red-500" />
         </button>
 
-        <h2 className="mb-4 text-lg font-bold text-white">Cadastrar Propriedade</h2>
+        <h2 className="mb-4 text-lg font-bold text-white">Editar Propriedade</h2>
 
         <div className="flex flex-col gap-2">
           <div>
@@ -135,9 +136,7 @@ export const CreatePropertyModal = ({
                 />
               )}
             />
-            {errors.name && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.name.message}</span>
-            )}
+            {errors.name && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.name.message}</span>}
           </div>
 
           <div>
@@ -155,9 +154,7 @@ export const CreatePropertyModal = ({
                 />
               )}
             />
-            {errors.description && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.description.message}</span>
-            )}
+            {errors.description && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.description.message}</span>}
           </div>
 
           <div>
@@ -176,12 +173,10 @@ export const CreatePropertyModal = ({
                 </select>
               )}
             />
-            {errors.type && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.type.message}</span>
-            )}
+            {errors.type && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.type.message}</span>}
           </div>
 
-          <div className='mt-4'>
+          <div className="mt-4">
             <label className="text-white text-sm font-semibold" htmlFor="minTime">Tempo Mínimo (h)</label>
             <Controller
               name="minTime"
@@ -196,9 +191,7 @@ export const CreatePropertyModal = ({
                 />
               )}
             />
-            {errors.minTime && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.minTime.message}</span>
-            )}
+            {errors.minTime && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.minTime.message}</span>}
           </div>
 
           <div>
@@ -216,9 +209,7 @@ export const CreatePropertyModal = ({
                 />
               )}
             />
-            {errors.maxTime && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.maxTime.message}</span>
-            )}
+            {errors.maxTime && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.maxTime.message}</span>}
           </div>
 
           <div>
@@ -236,13 +227,11 @@ export const CreatePropertyModal = ({
                 />
               )}
             />
-            {errors.pricePerHour && (
-              <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.pricePerHour.message}</span>
-            )}
+            {errors.pricePerHour && <span className="text-red-500 text-sm font-bold mt-[-12px] block">{errors.pricePerHour.message}</span>}
           </div>
 
           <div className="mt-6 flex justify-end">
-            <Button type="button" label="Cadastrar" onClick={handleSubmit(onSubmit)} />
+            <Button type="button" label="Salvar alterações" onClick={handleSubmit(onSubmit)} />
           </div>
         </div>
       </motion.div>

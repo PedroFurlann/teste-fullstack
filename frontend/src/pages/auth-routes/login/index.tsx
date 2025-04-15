@@ -71,6 +71,12 @@ export default function Login() {
     },
   });
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit(handleSignIn)();
+    }
+  };
+
   async function handleSignIn({ type, identifier, password }: FormData) {
     setIsSubmitting(true);
 
@@ -143,6 +149,7 @@ export default function Login() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          onKeyDown={handleKeyDown}
         >
           <motion.p
             className="text-2xl text-gray-200 font-bold"

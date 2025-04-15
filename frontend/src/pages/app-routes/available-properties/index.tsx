@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../../../services/api';
 import DateTimeInput from '../../../components/Inputs/DateTimeInput';
 import Loader from '../../../components/Loader';
-import { PropertyCard } from './components/PropertyCard';
+import { PropertyCard } from '../../../components/PropertyCard';
 import { FilterModal } from './components/FilterModal';
 import { PropertyDTO } from '../../../DTOs/PropertyDTO';
 import dayjs from 'dayjs';
@@ -253,7 +253,7 @@ export default function AvailableProperties() {
         </motion.div>
       ) : (
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:px-24 px-6"
+          className="grid lg:grid-cols-3 gap-4 md:px-24 px-6"
           initial="hidden"
           animate="visible"
           variants={{
@@ -274,7 +274,11 @@ export default function AvailableProperties() {
               }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
-              <PropertyCard property={property} onBooking={handleOpenBookingModal} />
+              <PropertyCard 
+                property={property} 
+                isBooking
+                onAction={handleOpenBookingModal} 
+              />
             </motion.div>
           ))}
         </motion.div>

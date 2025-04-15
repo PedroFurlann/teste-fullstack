@@ -66,6 +66,16 @@ const Navbar: React.FC = () => {
               </p>
             </a>
 
+            <a key={"Minhas Propriedades"}>
+              <p 
+                className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
+                onClick={() => navigate('/my-properties')}
+              >
+                
+                Minhas propriedades
+              </p>
+            </a>
+
           </div>
         )}
       </div>

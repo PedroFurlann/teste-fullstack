@@ -71,6 +71,12 @@ export default function Register() {
     },
   });
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit(handleSignUp)();
+    }
+  };
+
   async function handleSignUp({ name, email, password, cpf, phone }: FormData) {
     setIsSubmitting(true);
 
@@ -154,6 +160,7 @@ export default function Register() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
+          onKeyDown={handleKeyDown}
         >
           <motion.p
             className="text-2xl text-gray-200 font-bold"
