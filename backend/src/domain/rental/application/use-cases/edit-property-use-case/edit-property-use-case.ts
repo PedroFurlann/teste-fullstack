@@ -55,7 +55,7 @@ export class EditPropertyUseCase {
     if (maxTime) propertySelected.maxTime = maxTime;
     if (pricePerHour) propertySelected.pricePerHour = pricePerHour;
 
-    if (propertySelected.minTime >= propertySelected.maxTime) {
+    if (propertySelected.minTime > propertySelected.maxTime) {
       return left(new InvalidTimeError());
     }
 

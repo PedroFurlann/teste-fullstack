@@ -3,9 +3,10 @@ import { Buildings, Car, Money, Clock } from "phosphor-react";
 
 interface PropertyCardProps {
   property: PropertyDTO;
+  onBooking: (property: PropertyDTO) => void;
 }
 
-export const PropertyCard = ({ property }: PropertyCardProps) => {
+export const PropertyCard = ({ property, onBooking }: PropertyCardProps) => {
   const typeLabel = property.type === "car" ? "Carro" : "Casa";
 
   return (
@@ -50,7 +51,9 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
 
-        <button className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700">
+        <button
+          onClick={() => onBooking(property)}
+          className="mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700">
           Reservar
         </button>
       </div>

@@ -40,8 +40,8 @@ const createPropertyBodySchema = z.object({
   description: z
     .string()
     .min(5, 'A Descrição deve ter pelo menos 5 caracteres'),
-  minTime: z.number().min(1, 'O tempo mínimo deve ser maior do que zero'),
-  maxTime: z.number().min(2, 'O tempo máximo deve ser maior do que 1'),
+  minTime: z.number().min(1, 'O tempo mínimo deve ser maior do que 0'),
+  maxTime: z.number().min(1, 'O tempo máximo deve ser maior do que 0'),
   pricePerHour: z
     .number()
     .min(1, 'O preço por hora deve ser maior do que zero'),
@@ -60,7 +60,7 @@ const editPropertyBodySchema = z.object({
     .optional(),
   maxTime: z
     .number()
-    .min(2, 'O tempo máximo deve ser maior do que 1')
+    .min(1, 'O tempo máximo deve ser maior do que zero')
     .optional(),
   pricePerHour: z
     .number()

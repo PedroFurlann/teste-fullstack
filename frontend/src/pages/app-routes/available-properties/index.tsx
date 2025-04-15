@@ -12,14 +12,17 @@ import Navbar from '../../../components/NavBar';
 import { motion } from 'framer-motion';
 import Button from '../../../components/Button';
 import { CreatePropertyFormData, CreatePropertyModal } from '../../../components/CreatePropertyModal';
+import { CreateBookingFormData, CreateBookingModal } from '../../../components/CreateBookingModal';
 
 export default function AvailableProperties() {
-  const [properties, setProperties] = useState<PropertyDTO[]>([{ id: "1", type: "car", name: 'name test', description: 'test', minTime: 1, maxTime: 2, pricePerHour: 10, createdAt: new Date(), updatedAt: new Date() }]);
+  const [properties, setProperties] = useState<PropertyDTO[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DDTHH:mm'));
   const [endDate, setEndDate] = useState(dayjs().add(1, 'week').format('YYYY-MM-DDTHH:mm'));
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
   const [isCreatePropertyModalOpen, setIsCreatePropertyModalOpen] = useState(false);
+  const [isCreateBookingModalOpen, setIsCreateBookingModalOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<PropertyDTO | null>(null);
   const [filters, setFilters] = useState({
     name: '',
     description: '',
@@ -33,8 +36,8 @@ export default function AvailableProperties() {
       setIsLoading(true);
 
       const queryParams = Object.entries({
-        startDate: dayjs(startDate).add(3, 'hours').format('YYYY-MM-DDTHH:mm'),
-        endDate: dayjs(endDate).add(3, 'hours').format('YYYY-MM-DDTHH:mm'),
+        startDate: dayjs(startDate),
+        endDate: dayjs(endDate),
         ...filters,
       }).reduce((acc, [key, value]) => {
         if (value !== undefined && value !== '' && value !== null) {
@@ -108,6 +111,62 @@ export default function AvailableProperties() {
     }
   };
 
+  const handleCreateBooking = async (data: CreateBookingFormData) => {
+    if (!selectedProperty) return;
+
+    try {
+      setIsLoading(true);
+
+      const bookingData = {
+        propertyId: selectedProperty.id,
+        startDate: dayjs(data.startDate).format('YYYY-MM-DDTHH:mm'),
+        endDate: dayjs(data.endDate).format('YYYY-MM-DDTHH:mm'),
+      };
+
+      await api.post('/bookings', bookingData);
+
+      toast.success('Reserva realizada com sucesso!', {
+        position: 'top-right',
+        autoClose: 3000,
+        theme: 'dark',
+        style: {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontWeight: 'bold',
+        },
+      });
+
+      setIsCreateBookingModalOpen(false);
+      fetchProperties();
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível criar a reserva. Tente novamente mais tarde.';
+
+      toast.error(title, {
+        position: 'top-right',
+        autoClose: 3000,
+        theme: 'dark',
+        style: {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontWeight: 'bold',
+        },
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const handleOpenBookingModal = (property: PropertyDTO) => {
+    setSelectedProperty(property);
+    setIsCreateBookingModalOpen(true);
+  };
+
   useEffect(() => {
     if (startDate && endDate) {
       fetchProperties();
@@ -157,6 +216,20 @@ export default function AvailableProperties() {
         onCreate={handleCreateProperty}
       />
 
+      {isCreateBookingModalOpen && selectedProperty && (
+        <CreateBookingModal
+          isOpen={isCreateBookingModalOpen}
+          onClose={() => {
+            setIsCreateBookingModalOpen(false);
+            setSelectedProperty(null);
+          }}
+          onCreate={handleCreateBooking}
+          property={selectedProperty}
+          startDate={startDate}
+          endDate={endDate}
+        />
+      )}
+
       {isLoading ? (
         <div className="flex flex-grow items-center justify-center w-full h-full">
           <Loader />
@@ -201,7 +274,7 @@ export default function AvailableProperties() {
               }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
-              <PropertyCard property={property} />
+              <PropertyCard property={property} onBooking={handleOpenBookingModal} />
             </motion.div>
           ))}
         </motion.div>

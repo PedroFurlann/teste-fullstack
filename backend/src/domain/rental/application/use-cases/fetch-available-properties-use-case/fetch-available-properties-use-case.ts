@@ -52,6 +52,8 @@ export class FetchAvailablePropertiesUseCase {
       orderDirection,
     });
 
+    console.log(startDate, endDate);
+
     return right({ properties });
   }
 }

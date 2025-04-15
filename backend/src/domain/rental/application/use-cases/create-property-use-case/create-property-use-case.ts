@@ -33,7 +33,7 @@ export class CreatePropertyUseCase {
     maxTime,
     pricePerHour,
   }: CreatePropertyUseCaseRequest): Promise<CreatePropertyUseCaseResponse> {
-    if (minTime >= maxTime) {
+    if (minTime > maxTime) {
       return left(new InvalidTimeError());
     }
 

@@ -41,7 +41,7 @@ const schema = yup.object().shape({
     .required('O tempo mínimo é obrigatório'),
   maxTime: yup
     .number()
-    .min(2, 'O tempo máximo deve ser pelo menos 2 horas')
+    .min(1, 'O tempo máximo deve ser pelo de 1 hora')
     .required('O tempo máximo é obrigatório')
     .test(
       'is-greater',
@@ -70,7 +70,7 @@ export const CreatePropertyModal = ({
       description: '',
       type: 'car',
       minTime: 1,
-      maxTime: 2,
+      maxTime: 1,
       pricePerHour: 1,
     },
   });

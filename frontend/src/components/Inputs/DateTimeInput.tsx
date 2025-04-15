@@ -6,6 +6,7 @@ type DateTimeInputProps = {
   onChange: (value: string) => void;
   disabled?: boolean;
   label?: string;
+  id?: string;
 };
 
 const DateTimeInput: React.FC<DateTimeInputProps> = ({
@@ -14,6 +15,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
   disabled = false,
   onChange,
   label,
+  id,
 }) => {
   const [inputValue, setInputValue] = useState(value || '');
 
@@ -24,11 +26,12 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
   };
 
   return (
-    <div className="mb-4 md:max-w-[320px] w-full">
+    <div className="`mb-4 w-full`">
       {label && <label className="mb-1 block text-sm font-bold text-white">{label}</label>}
 
       <input
         type="datetime-local"
+        id={id}
         value={inputValue}
         placeholder={placeholder}
         onChange={handleChange}
