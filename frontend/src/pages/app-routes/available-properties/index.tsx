@@ -11,13 +11,15 @@ import { AppError } from '../../../utils/AppError';
 import Navbar from '../../../components/NavBar';
 import { motion } from 'framer-motion';
 import Button from '../../../components/Button';
+import { CreatePropertyFormData, CreatePropertyModal } from '../../../components/CreatePropertyModal';
 
 export default function AvailableProperties() {
   const [properties, setProperties] = useState<PropertyDTO[]>([{ id: "1", type: "car", name: 'name test', description: 'test', minTime: 1, maxTime: 2, pricePerHour: 10, createdAt: new Date(), updatedAt: new Date() }]);
   const [isLoading, setIsLoading] = useState(true);
   const [startDate, setStartDate] = useState(dayjs().format('YYYY-MM-DDTHH:mm'));
   const [endDate, setEndDate] = useState(dayjs().add(1, 'week').format('YYYY-MM-DDTHH:mm'));
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
+  const [isCreatePropertyModalOpen, setIsCreatePropertyModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     name: '',
     description: '',
@@ -68,6 +70,44 @@ export default function AvailableProperties() {
     }
   };
 
+  const handleCreateProperty = async (data: CreatePropertyFormData) => {
+    setIsLoading(true);
+
+    try {
+      await api.post('/properties', data);
+      toast.success('Propriedade cadastrada com sucesso!', {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bold",
+        },
+      });
+      fetchProperties();
+    } catch (error) {
+      setIsLoading(false);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível cadastrar a propriedade. Tente novamente mais tarde.";
+
+      toast.error(title, {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bold",
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     if (startDate && endDate) {
       fetchProperties();
@@ -101,14 +141,20 @@ export default function AvailableProperties() {
 
         <Button
           label="Filtros"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => setIsFiltersModalOpen(true)}
         />
       </motion.div>
 
       <FilterModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isFiltersModalOpen}
+        onClose={() => setIsFiltersModalOpen(false)}
         onApply={(appliedFilters) => setFilters(prev => ({ ...prev, ...appliedFilters }))}
+      />
+
+      <CreatePropertyModal
+        isOpen={isCreatePropertyModalOpen}
+        onClose={() => setIsCreatePropertyModalOpen(false)}
+        onCreate={handleCreateProperty}
       />
 
       {isLoading ? (
@@ -129,7 +175,7 @@ export default function AvailableProperties() {
 
           <Button
             label="Cadastrar Propriedade"
-            onClick={() => { }}
+            onClick={() => setIsCreatePropertyModalOpen(true)}
           />
         </motion.div>
       ) : (

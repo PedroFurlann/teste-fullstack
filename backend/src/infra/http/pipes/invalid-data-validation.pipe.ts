@@ -11,14 +11,14 @@ export class InvalidDataValidationPipe implements PipeTransform {
     } catch (error) {
       if (error instanceof ZodError) {
         throw new BadRequestException({
-          error_description:
+          message:
             error.errors[0].message ||
             'Os dados fornecidos para a requisição são inválidos',
         });
       }
 
       throw new BadRequestException({
-        error_description: 'A validação falhou devido a um erro desconhecido',
+        message: 'A validação falhou devido a um erro desconhecido',
       });
     }
   }

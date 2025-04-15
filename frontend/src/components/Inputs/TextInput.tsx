@@ -3,13 +3,15 @@ type TextInputProps = {
   placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  id?: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({ placeholder = '', value, disabled = false, onChange }) => {
+const TextInput: React.FC<TextInputProps> = ({ id, placeholder = '', value, disabled = false, onChange }) => {
   return (
     <div className="mb-4 w-full">
       <input
         type="text"
+        id={id}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
