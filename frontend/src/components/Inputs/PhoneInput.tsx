@@ -6,9 +6,10 @@ type PhoneInputProps = {
   placeholder?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  id?: string;
 };
 
-const PhoneInput: React.FC<PhoneInputProps> = ({ placeholder = 'Digite seu telefone', value, disabled = false, onChange }) => {
+const PhoneInput: React.FC<PhoneInputProps> = ({ placeholder = 'Digite seu telefone', id, value, disabled = false, onChange }) => {
   const [inputValue, setInputValue] = useState(value || "");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +25,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({ placeholder = 'Digite seu telef
         value={inputValue}
         placeholder={placeholder}
         onChange={handleChange}
+        id={id}
         disabled={disabled}
         className={`w-full p-2 border border-gray-600 rounded bg-white text-black
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-text'}

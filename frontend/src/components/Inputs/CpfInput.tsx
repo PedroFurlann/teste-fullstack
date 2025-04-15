@@ -6,9 +6,10 @@ type CpfInputProps = {
   placeholder?: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  id?: string;
 };
 
-const CpfInput: React.FC<CpfInputProps> = ({ placeholder = 'Digite seu CPF', value, disabled = false, onChange }) => {
+const CpfInput: React.FC<CpfInputProps> = ({ placeholder = 'Digite seu CPF', id, value, disabled = false, onChange }) => {
   const [inputValue, setInputValue] = useState(value || '');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +23,7 @@ const CpfInput: React.FC<CpfInputProps> = ({ placeholder = 'Digite seu CPF', val
       <input
         type="text"
         value={inputValue}
+        id={id}
         placeholder={placeholder}
         onChange={handleChange}
         disabled={disabled}

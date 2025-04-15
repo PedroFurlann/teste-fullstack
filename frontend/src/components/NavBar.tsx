@@ -57,22 +57,32 @@ const Navbar: React.FC = () => {
           >
 
             <a key={"Alugar"}>
-              <p 
+              <p
                 className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
                 onClick={() => navigate('/available-properties')}
               >
-                
+
                 Alugar
               </p>
             </a>
 
             <a key={"Minhas Propriedades"}>
-              <p 
+              <p
                 className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
                 onClick={() => navigate('/my-properties')}
               >
-                
+
                 Minhas propriedades
+              </p>
+            </a>
+
+            <a key={"Perfil"}>
+              <p
+                className="block cursor-pointer py-2 px-4 text-white font-bold hover:bg-violet-400 transition-all ease-in-out duration-300"
+                onClick={() => navigate('/profile')}
+              >
+
+                Perfil
               </p>
             </a>
 
