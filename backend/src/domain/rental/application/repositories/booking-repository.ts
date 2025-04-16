@@ -12,6 +12,7 @@ export abstract class BookingRepository {
     {
       booking: Booking;
       propertyName: string;
+      propertyPricePerHour: number;
     }[]
   >;
 }

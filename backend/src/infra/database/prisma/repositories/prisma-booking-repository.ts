@@ -68,6 +68,7 @@ export class PrismaBookingRepository implements BookingRepository {
     {
       booking: Booking;
       propertyName: string;
+      propertyPricePerHour: number;
     }[]
   > {
     const bookings = await this.prismaService.reserva.findMany({
@@ -80,6 +81,7 @@ export class PrismaBookingRepository implements BookingRepository {
     return bookings.map((booking) => ({
       booking: PrismaBookingMapper.toDomain(booking),
       propertyName: booking.locacao.nome,
+      propertyPricePerHour: booking.locacao.valorHora,
     }));
   }
 }

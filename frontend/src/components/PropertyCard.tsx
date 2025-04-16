@@ -24,18 +24,18 @@ export const PropertyCard = ({
 
         <div className="flex flex-col gap-1 text-sm text-gray-400">
           <div className="flex items-center gap-2">
+            <span className="font-semibold text-white">{typeLabel}</span>
             {property.type === "car" ? (
               <Car size={16} className="text-white" weight="bold" />
             ) : (
               <Buildings size={16} className="text-white" weight="bold" />
             )}
-            <span className="font-semibold text-white">{typeLabel}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-white">Preço por hora</span>
-            <Money size={16} className="text-white" weight="bold" />
             <span className="font-semibold text-violet-400">R$ {property.pricePerHour}</span>
+            <Money size={16} className="text-white" weight="bold" />
           </div>
         </div>
       </div>

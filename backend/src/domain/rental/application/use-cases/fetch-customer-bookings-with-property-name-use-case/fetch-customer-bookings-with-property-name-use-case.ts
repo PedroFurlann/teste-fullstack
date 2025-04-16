@@ -13,6 +13,7 @@ type FetchCustomerBookingsWithPropertyNameUseCaseResponse = Either<
       bookingId: string;
       propertyId: string;
       propertyName: string;
+      propertyPricePerHour: number;
       startDate: Date;
       endDate: Date;
       finalPrice: number;
@@ -31,15 +32,18 @@ export class FetchCustomerBookingsWithPropertyNameUseCase {
     const bookingsWithProperty =
       await this.bookingRepository.findWithPropertyNameByCustomerId(customerId);
 
-    const bookings = bookingsWithProperty.map(({ booking, propertyName }) => ({
-      bookingId: booking.id.toString(),
-      propertyId: booking.propertyId.toString(),
-      propertyName,
-      startDate: booking.startDate,
-      endDate: booking.endDate,
-      finalPrice: booking.finalPrice,
-      status: booking.status,
-    }));
+    const bookings = bookingsWithProperty.map(
+      ({ booking, propertyName, propertyPricePerHour }) => ({
+        bookingId: booking.id.toString(),
+        propertyId: booking.propertyId.toString(),
+        propertyName,
+        propertyPricePerHour,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+        finalPrice: booking.finalPrice,
+        status: booking.status,
+      }),
+    );
 
     return right({ bookings });
   }

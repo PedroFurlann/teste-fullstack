@@ -22,7 +22,7 @@ import { FloppyDisk, SignOut, Trash } from "phosphor-react";
 import { BasicModal } from "../../../components/BasicModal";
 
 export default function Profile() {
-  const [isloading, setIsLoading] = useState(false);
+  const [isloading, setIsLoading] = useState(true);
   const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
   const [isUpdateProfileModalOpen, setIsUpdateProfileModalOpen] = useState(false);
   const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] = useState(false);
@@ -229,8 +229,8 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    fetchProfile()
-  }, [])
+    fetchProfile();
+  }, []);
 
   return isloading ? (
     <div className="min-h-screen flex flex-col bg-gray-900 overflow-y-auto items-center justify-center">

@@ -4,6 +4,7 @@ export class CustomerBookingsWithPropertyNamePresenter {
       bookingId: string;
       propertyId: string;
       propertyName: string;
+      propertyPricePerHour: number;
       startDate: Date;
       endDate: Date;
       finalPrice: number;
@@ -15,6 +16,7 @@ export class CustomerBookingsWithPropertyNamePresenter {
         id: booking.bookingId,
         propertyId: booking.propertyId,
         propertyName: booking.propertyName,
+        propertyPricePerHour: booking.propertyPricePerHour,
         startDate: booking.startDate,
         endDate: booking.endDate,
         finalPrice: booking.finalPrice,

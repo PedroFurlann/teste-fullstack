@@ -275,6 +275,7 @@ export default function AvailableProperties() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               <PropertyCard 
+                key={property.id}
                 property={property} 
                 isBooking
                 onAction={handleOpenBookingModal} 

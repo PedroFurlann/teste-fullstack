@@ -18,7 +18,11 @@ describe('Fetch customer bookings with property name', () => {
   it('should return customer bookings with properties names', async () => {
     const customerId = new UniqueEntityID('customer-1');
 
-    const property = makeProperty({ name: 'Mustang', customerId: customerId });
+    const property = makeProperty({
+      name: 'Mustang',
+      customerId: customerId,
+      pricePerHour: 100,
+    });
     const booking = makeBooking({
       propertyId: property.id,
       customerId: customerId,
@@ -38,5 +42,6 @@ describe('Fetch customer bookings with property name', () => {
       property.id.toString(),
     );
     expect(result.value?.bookings[0].propertyName).toEqual('Mustang');
+    expect(result.value?.bookings[0].propertyPricePerHour).toEqual(100);
   });
 });

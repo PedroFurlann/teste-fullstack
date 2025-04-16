@@ -46,6 +46,7 @@ export class InMemoryBookingRepository implements BookingRepository {
     {
       booking: Booking;
       propertyName: string;
+      propertyPricePerHour: number;
     }[]
   > {
     return this.items
@@ -58,6 +59,7 @@ export class InMemoryBookingRepository implements BookingRepository {
         return {
           booking,
           propertyName: property?.name,
+          propertyPricePerHour: property?.pricePerHour,
         };
       });
   }

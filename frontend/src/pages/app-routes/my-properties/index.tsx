@@ -250,8 +250,7 @@ export default function MyProperties() {
           transition={{ duration: 0.4 }}
         >
           <p className="text-center text-white font-bold mt-10">
-            Parece que não tem nenhuma propriedade disponível para os filtros informados,
-            que tal cadastrar uma?
+            Você ainda não possui propriedades cadastradas. Que tal cadastrar uma?
           </p>
         </motion.div>
       ) : (
@@ -278,6 +277,7 @@ export default function MyProperties() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               <PropertyCard
+                key={property.id}
                 property={property}
                 onAction={() => handleOpenEditPropertyModal(property)}
                 onDelete={() => handleOpenDeletePropertyModal(property)}
