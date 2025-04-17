@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { EditBookingFormData, EditBookingModal } from "../../../components/EditBookingModal";
 import { BasicModal } from "../../../components/BasicModal";
 import { BookingCard } from "../../../components/BookingCard";
+import { BookingWithPropertyDetailsDTO } from "../../../DTOs/BookingWithPropertyDetailsDTO";
+import { BookingDetailsModal } from "../../../components/BookingDetailsModal";
 
 export default function MyBookings() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,10 +23,43 @@ export default function MyBookings() {
     useState(false);
   const [isEditBookingModalOpen, setIsEditBookingModalOpen] = useState(false);
   const [isCancelBookingModalOpen, setIsCancelBookingModalOpen] = useState(false);
+  const [isBookingDetailsModalOpen, setIsBookingDetailsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<BookingWithPropertyNameDTO | null>(null);
+  const [selectedBookingWithDetails, setSelectedBookingWithDetails] = useState<BookingWithPropertyDetailsDTO | null>(null);
 
   const navigate = useNavigate();
 
+  const handleOpenBookingDetailsModal = async (bookingId: string) => {
+
+    try {
+      const { data } = await api.get(`/bookings/${bookingId}`);
+      setSelectedBookingWithDetails(data.bookingWithPropertyDetails);
+      setIsBookingDetailsModalOpen(true);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível carregar os detalhes da reserva. Tente novamente mais tarde.";
+
+      toast.error(title, {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+        style: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bold",
+        },
+      });
+    } 
+
+  }
+
+  const handleCloseBookingDetailsModal = () => {
+    setIsBookingDetailsModalOpen(false);
+    setSelectedBookingWithDetails(null);
+  }
 
   const handleOpenDeleteBookingModal = (booking: BookingWithPropertyNameDTO) => {
     setIsConfirmationDeleteModalOpen(true);
@@ -267,6 +302,14 @@ export default function MyBookings() {
         />
       )}
 
+      {isBookingDetailsModalOpen && selectedBookingWithDetails && (
+        <BookingDetailsModal 
+          isOpen={isBookingDetailsModalOpen}
+          onClose={handleCloseBookingDetailsModal}
+          booking={selectedBookingWithDetails}
+        />
+      )}
+
       {bookings.length === 0 ? (
         <motion.div
           className="md:px-24 px-6 flex flex-col items-center justify-center gap-4"
@@ -307,7 +350,7 @@ export default function MyBookings() {
                 onCancel={() => handleOpenCancelBookingModal(booking)}
                 onEdit={() => handleOpenEditBookingModal(booking)}
                 onDelete={() => handleOpenDeleteBookingModal(booking)}
-                onViewDetails={() => {}}
+                onViewDetails={() => handleOpenBookingDetailsModal(booking.id)}
               />
             </motion.div>
           ))}

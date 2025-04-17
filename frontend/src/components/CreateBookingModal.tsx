@@ -14,8 +14,6 @@ interface CreateBookingModalProps {
   onClose: () => void;
   onCreate: (data: CreateBookingFormData) => void;
   property: PropertyDTO;
-  startDate: string;
-  endDate: string;
 }
 
 export type CreateBookingFormData = {
@@ -43,8 +41,6 @@ export const CreateBookingModal = ({
   onClose,
   onCreate,
   property,
-  startDate,
-  endDate,
 }: CreateBookingModalProps) => {
   const {
     control,
@@ -54,8 +50,8 @@ export const CreateBookingModal = ({
   } = useForm<CreateBookingFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      startDate: startDate,
-      endDate: endDate,
+      startDate: dayjs().add(1, "hour").format('YYYY-MM-DDTHH:mm'),
+      endDate: dayjs().add(4, 'hour').format('YYYY-MM-DDTHH:mm'),
     },
   });
 

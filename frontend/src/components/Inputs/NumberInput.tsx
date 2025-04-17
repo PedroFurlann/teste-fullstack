@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 type NumberInputProps = {
   value: number;
   placeholder?: string;
@@ -15,14 +17,40 @@ const NumberInput: React.FC<NumberInputProps> = ({
   error,
   id
 }) => {
+  const [internalValue, setInternalValue] = useState<string>(value === 0 ? '' : String(value));
+
+  useEffect(() => {
+    if (value === 0) {
+      setInternalValue('');
+    } else {
+      setInternalValue(String(value));
+    }
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+
+    setInternalValue(raw);
+
+    const fakeEvent = {
+      ...e,
+      target: {
+        ...e.target,
+        value: raw === '' ? '0' : raw,
+      },
+    };
+
+    onChange(fakeEvent);
+  };
+
   return (
     <div className="mb-4 w-full">
       <input
         type="number"
-        value={value}
+        value={internalValue}
         id={id}
         placeholder={placeholder}
-        onChange={onChange}
+        onChange={handleChange}
         disabled={disabled}
         className={`w-full p-2 border rounded bg-white text-black
           ${error ? 'border-red-500' : 'border-gray-600'}

@@ -20,6 +20,7 @@ import { Avatar } from "../../../components/Avatar";
 import Button from "../../../components/Button";
 import { FloppyDisk, SignOut, Trash } from "phosphor-react";
 import { BasicModal } from "../../../components/BasicModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [isloading, setIsLoading] = useState(true);
@@ -66,7 +67,7 @@ export default function Profile() {
     },
   });
 
-
+  const navigate = useNavigate( );
 
   const handleUpdateProfile = async (data: FormData) => {
     setIsLoading(true);
@@ -162,6 +163,7 @@ export default function Profile() {
     setIsLoading(true);
     try {
       await signOut();
+      navigate("/login");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -200,6 +202,7 @@ export default function Profile() {
         },
       });
       await signOut();
+      navigate("/login");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError

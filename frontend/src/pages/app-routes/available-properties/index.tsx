@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import Button from '../../../components/Button';
 import { CreatePropertyFormData, CreatePropertyModal } from '../../../components/CreatePropertyModal';
 import { CreateBookingFormData, CreateBookingModal } from '../../../components/CreateBookingModal';
+import { useNavigate } from 'react-router-dom';
 
 export default function AvailableProperties() {
   const [properties, setProperties] = useState<PropertyDTO[]>([]);
@@ -30,6 +31,8 @@ export default function AvailableProperties() {
     orderBy: 'name',
     orderDirection: 'asc',
   });
+
+  const navigate = useNavigate();
 
   const fetchProperties = async () => {
     try {
@@ -138,7 +141,7 @@ export default function AvailableProperties() {
       });
 
       setIsCreateBookingModalOpen(false);
-      fetchProperties();
+      navigate("/my-bookings");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
@@ -225,8 +228,6 @@ export default function AvailableProperties() {
           }}
           onCreate={handleCreateBooking}
           property={selectedProperty}
-          startDate={startDate}
-          endDate={endDate}
         />
       )}
 

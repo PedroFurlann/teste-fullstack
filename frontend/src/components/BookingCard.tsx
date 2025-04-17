@@ -5,7 +5,7 @@ import { formatToBRL } from "../utils/formatToBRL";
 
 interface BookingCardProps {
   booking: BookingWithPropertyNameDTO;
-  onViewDetails: (booking: BookingWithPropertyNameDTO) => void;
+  onViewDetails: () => void;
   onCancel?: (booking: BookingWithPropertyNameDTO) => void;
   onEdit?: (booking: BookingWithPropertyNameDTO) => void;
   onDelete?: (booking: BookingWithPropertyNameDTO) => void;
@@ -61,10 +61,17 @@ export const BookingCard = ({
 
       <div className="flex flex-wrap gap-2 justify-center md:justify-end pt-2">
         <button
-          onClick={() => onViewDetails(booking)}
+          onClick={() => onViewDetails()}
           className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
         >
           Ver detalhes
+        </button>
+
+        <button
+          onClick={() => onEdit?.(booking)}
+          className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
+        >
+          Editar
         </button>
 
         {isConfirmed && (
@@ -75,13 +82,6 @@ export const BookingCard = ({
             Cancelar
           </button>
         )}
-
-        <button
-          onClick={() => onEdit?.(booking)}
-          className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-700"
-        >
-          Editar
-        </button>
 
         <button
           onClick={() => onDelete?.(booking)}

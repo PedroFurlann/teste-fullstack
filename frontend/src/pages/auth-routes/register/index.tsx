@@ -331,7 +331,7 @@ export default function Register() {
             <p className="font-bold text-center text-md text-gray-200">
               Já possui uma conta?
               <p
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/login")}
                 className="text-violet-600 text-center text-md hover:cursor-pointer font-bold hover:opacity-70 transition-all ease-in-out duration-300"
               >
                 Faça login aqui

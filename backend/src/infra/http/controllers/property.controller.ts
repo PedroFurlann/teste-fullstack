@@ -34,9 +34,11 @@ import { InvalidDataValidationPipe } from '../pipes/invalid-data-validation.pipe
 import { InvalidTimeError } from '../../../domain/rental/application/use-cases/errors/invalid-time-error';
 import { InvalidDateError } from '../../../domain/rental/application/use-cases/errors/invalid-date-error';
 
+const typeEnum = z.enum(['car', 'house']);
+
 const createPropertyBodySchema = z.object({
   name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres'),
-  type: z.string().min(2, 'O Tipo deve ter pelo menos 2 caracteres'),
+  type: typeEnum,
   description: z
     .string()
     .min(5, 'A Descrição deve ter pelo menos 5 caracteres'),
@@ -49,7 +51,7 @@ const createPropertyBodySchema = z.object({
 
 const editPropertyBodySchema = z.object({
   name: z.string().min(5, 'O Nome deve ter pelo menos 5 caracteres').optional(),
-  type: z.string().min(2, 'O Tipo deve ter pelo menos 2 caracteres').optional(),
+  type: typeEnum.optional(),
   description: z
     .string()
     .min(5, 'A Descrição deve ter pelo menos 5 caracteres')
