@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
 
 type DateTimeInputProps = {
@@ -34,6 +35,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         id={id}
         value={inputValue}
         placeholder={placeholder}
+        min={dayjs().format('YYYY-MM-DDTHH:mm')}
         onChange={handleChange}
         disabled={disabled}
         className={`w-full rounded border border-gray-600 bg-white p-2 text-black
