@@ -1,6 +1,6 @@
 ## 🚀 Tecnologias Utilizadas
 
-### OBS: Na aplicação é permitida realizar uma reserva em sua propria propriedade para facilitar os testes. Essa regra não se aplicaria em produção.
+### OBS: Na aplicação é permitida realizar uma reserva em sua propria propriedade e também não é realizado o cálculo para validação de cpf para facilitar os testes. Essas regras não se aplicariam em produção.
 
 ### 🖥 Frontend
 

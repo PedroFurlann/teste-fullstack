@@ -51,7 +51,7 @@ export const CreateBookingModal = ({
     resolver: yupResolver(schema),
     defaultValues: {
       startDate: dayjs().add(1, "hour").format('YYYY-MM-DDTHH:mm'),
-      endDate: dayjs().add(4, 'hour').format('YYYY-MM-DDTHH:mm'),
+      endDate: dayjs().add(2, 'hour').format('YYYY-MM-DDTHH:mm'),
     },
   });
 
