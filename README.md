@@ -1,6 +1,8 @@
+### OBS: Na aplicação é permitida realizar uma reserva em sua propria propriedade e também não é realizado o cálculo para validação de cpf para facilitar os testes. Essas regras não se aplicariam em produção.
+
 ## 🚀 Tecnologias Utilizadas
 
-### OBS: Na aplicação é permitida realizar uma reserva em sua propria propriedade e também não é realizado o cálculo para validação de cpf para facilitar os testes. Essas regras não se aplicariam em produção.
+
 
 ### 🖥 Frontend
 
@@ -56,6 +58,8 @@ docker compose up
 ### 🛠 Executando Manualmente (Sem Docker)
 
 ## AVISO 2! Para a aplicação funcionar sem o Docker será necessário subir um banco de dados MySQL na sua máquina!!!
+
+### OBS: Existe um .env.example na raíz do projeto e na pasta do backend, será necessário criar um .env para cada .env.example em seus respectivos diretórios.
 
 
 #### 1️⃣ Backend
@@ -116,6 +120,7 @@ npm run dev
 ✅ Animações suaves com Framer Motion  
 ✅ Implementação de técnicas de segurança na aplicação (ex: autenticação
 JWT, proteção contra SQL Injection, CORS configurado corretamente, etc.). 
+
 ✅ Aplicação Dockerizada  
 ✅ Coleção do Postman disponibilizada para teste dos endpoints  
 ✅ Implementação de testes unitários nos use cases  
