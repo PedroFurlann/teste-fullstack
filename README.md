@@ -1,4 +1,4 @@
-### OBS: Na aplicação é permitida realizar uma reserva em sua propria propriedade e também não é realizado o cálculo para validação de cpf para facilitar os testes. Essas regras não se aplicariam em produção.
+### OBS: Na aplicação é permitido realizar uma reserva em sua propria propriedade e também não é realizado o cálculo para validação de cpf para facilitar os testes. Essas regras não se aplicariam em produção.
 
 ## 🚀 Tecnologias Utilizadas
 
