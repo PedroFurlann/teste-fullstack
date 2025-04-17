@@ -114,6 +114,12 @@ npm run dev
 
 ✅ Aplicação completa para gerenciar locações e reservas  
 ✅ Animações suaves com Framer Motion  
+✅ Implementação de técnicas de segurança na aplicação (ex: autenticação
+JWT, proteção contra SQL Injection, CORS configurado corretamente, etc.). 
+✅ Aplicação Dockerizada  
+✅ Coleção do Postman disponibilizada para teste dos endpoints  
+✅ Implementação de testes unitários nos use cases  
+✅ Layout amigável e responsivo  
 ✅ Persistência de dados com Prisma ORM e MySQL  
 ✅ Backend robusto utilizando NestJS  
 ✅ Arquitetura modular seguindo os princípios do DDD e Clean Architecture  

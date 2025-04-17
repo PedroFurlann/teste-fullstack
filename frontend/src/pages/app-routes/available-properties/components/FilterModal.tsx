@@ -39,6 +39,13 @@ export const FilterModal = ({ isOpen, onClose, onApply }: FilterModalProps) => {
     onApply({ name: '', description: '', type: 'car', orderBy: '', orderDirection: 'asc' });
   };
 
+  const hanleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      onApply({ name, description, type: 'car', orderBy, orderDirection });
+      onClose();
+    }
+  };
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -63,7 +70,7 @@ export const FilterModal = ({ isOpen, onClose, onApply }: FilterModalProps) => {
 
         <h2 className="mb-4 text-lg font-bold text-white">Filtrar e Ordenar</h2>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4" onKeyDown={hanleKeyDown}>
           <TextInput
             placeholder="Nome"
             value={name}
