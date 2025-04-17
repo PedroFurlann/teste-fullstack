@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import { X } from 'phosphor-react';
 import dayjs from 'dayjs';
 import { PropertyDTO } from '../DTOs/PropertyDTO';
+import { formatToBRL } from '../utils/formatToBRL';
 
 interface CreateBookingModalProps {
   isOpen: boolean;
@@ -76,7 +77,7 @@ export const CreateBookingModal = ({
     const start = dayjs(startDate);
     const end = dayjs(endDate);
     const hours = end.diff(start, 'hour');
-    return hours * property.pricePerHour;
+    return formatToBRL(hours * property.pricePerHour);
   }
 
   const onSubmit = (data: CreateBookingFormData) => {
@@ -161,7 +162,7 @@ export const CreateBookingModal = ({
             </p>
             <p 
               className='block text-sm font-bold text-white'>
-                Total: R$ {calculateTotalPrice(watch("startDate"), watch("endDate"))}
+                Total: {calculateTotalPrice(watch("startDate"), watch("endDate"))}
               </p>
           </div>
 

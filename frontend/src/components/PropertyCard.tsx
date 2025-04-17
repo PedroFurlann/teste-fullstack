@@ -1,5 +1,6 @@
 import { PropertyDTO } from "../DTOs/PropertyDTO";
 import { Buildings, Car, Money, Clock } from "phosphor-react";
+import { formatToBRL } from "../utils/formatToBRL";
 
 interface PropertyCardProps {
   property: PropertyDTO;
@@ -34,7 +35,7 @@ export const PropertyCard = ({
 
           <div className="flex items-center gap-2">
             <span className="font-semibold text-white">Preço por hora</span>
-            <span className="font-semibold text-violet-400">R$ {property.pricePerHour}</span>
+            <span className="font-semibold text-violet-400">{formatToBRL(property.pricePerHour)}</span>
             <Money size={16} className="text-white" weight="bold" />
           </div>
         </div>

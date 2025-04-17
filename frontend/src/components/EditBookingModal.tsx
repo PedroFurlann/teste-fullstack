@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import { X } from 'phosphor-react';
 import dayjs from 'dayjs';
 import { BookingWithPropertyNameDTO } from '../DTOs/BookingWithPropertyNameDTO';
+import { formatToBRL } from '../utils/formatToBRL';
 
 export type EditBookingFormData = {
   startDate: string;
@@ -72,7 +73,7 @@ export const EditBookingModal = ({
     const start = dayjs(startDate);
     const end = dayjs(endDate);
     const hours = end.diff(start, 'hour');
-    return hours * booking.propertyPricePerHour;
+    return formatToBRL(hours * booking.propertyPricePerHour);
   };
 
   const onSubmit = (data: EditBookingFormData) => {
@@ -155,7 +156,7 @@ export const EditBookingModal = ({
               Duração: {calculateTotalHours(watch('startDate'), watch('endDate'))} hora(s)
             </p>
             <p className="block text-sm font-bold text-white">
-              Total: R$ {calculateTotalPrice(watch('startDate'), watch('endDate'))}
+              Total: {calculateTotalPrice(watch('startDate'), watch('endDate'))}
             </p>
           </div>
 

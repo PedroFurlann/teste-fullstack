@@ -275,7 +275,7 @@ export default function MyBookings() {
           transition={{ duration: 0.4 }}
         >
           <p className="text-center text-white font-bold mt-10">
-            Parece que não tem nenhuma propriedade reservada ainda.
+            Parece que você não tem nenhuma propriedade reservada ainda.
           </p>
         </motion.div>
       ) : (

@@ -1,6 +1,7 @@
 import { BookingWithPropertyNameDTO } from "../DTOs/BookingWithPropertyNameDTO";
 import { Calendar, Money, CheckCircle, XCircle } from "phosphor-react";
 import dayjs from "dayjs";
+import { formatToBRL } from "../utils/formatToBRL";
 
 interface BookingCardProps {
   booking: BookingWithPropertyNameDTO;
@@ -52,7 +53,7 @@ export const BookingCard = ({
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-white">Total:</span>
           <span className="text-violet-400 font-semibold">
-            R$ {booking.finalPrice.toFixed(2)}
+            {formatToBRL(booking.finalPrice)}
           </span>
           <Money size={16} className="text-white" weight="bold" />
         </div>
