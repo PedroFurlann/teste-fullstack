@@ -37,8 +37,9 @@ import { InvalidDateError } from '../../../domain/rental/application/use-cases/e
 import { NotAllowedEditCanceledBookingError } from '../../../domain/rental/application/use-cases/errors/not-allowed-edit-canceled-booking-error';
 import { BookingAlreadyCanceledError } from '../../../domain/rental/application/use-cases/errors/booking-already-canceled-error';
 import { DateCannotBeRetroactiveError } from 'src/domain/rental/application/use-cases/errors/date-cannot-be-retroactive-error';
+import dayjs from 'dayjs';
 
-const now = new Date();
+const now = dayjs().toDate();
 
 const createBookingBodySchema = z
   .object({
